@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +24,15 @@ import android.widget.TextView;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
+import com.wos.dernv.evilbanefiends.fragments.FrPlayerActMain;
 import com.wos.dernv.evilbanefiends.logs.L;
 
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,ClickCallBack{
 
+
+    //Backk Press
+    private int stateBackPress=0;
     // Necesario para coordinar vistas dentro del Layout "SnackBar"
     private CoordinatorLayout mCoordinator;
     //Vars para setear el titulo del App Bar
@@ -88,6 +93,23 @@ public class ActivityMain extends AppCompatActivity
         mFab = (FloatingActionButton) findViewById(R.id.fab);
 
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }else if(stateBackPress==1000){
+            stateBackPress=0;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrMenuActMain.newInstance())
+                    .commit();
+        }
+
+        else{
+        super.onBackPressed();}
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -118,5 +140,12 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onRSCItemMenuSelected(int position) {
         L.t(this,"Menu: "+position);
+        if(position==1){
+            stateBackPress=1000;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrPlayerActMain.newInstance())
+                    .commit();
+        }
     }
 }

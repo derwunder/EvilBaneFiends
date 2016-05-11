@@ -1,6 +1,10 @@
 package com.wos.dernv.evilbanefiends.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +13,30 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.logs.L;
+import com.wos.dernv.evilbanefiends.network.Key;
+import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
+import com.wos.dernv.evilbanefiends.network.UrlEP;
 import com.wos.dernv.evilbanefiends.objects.Player;
+import com.wos.dernv.evilbanefiends.objects.WikiEquipo;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -25,16 +49,30 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
     private LayoutInflater inflater;
     private ArrayList<Player> listPlayer = new ArrayList<>();
 
+    private MyVolleySingleton myVolleySingleton;
+    private RequestQueue requestQueue;
+    private ImageLoader imageLoader;
+    private ProgressDialog progressDialog ;private int persistenTry=0;
+
+    private ArrayList<Boolean> listVisorDetalle=new ArrayList<>();
+
     private ClickCallBack clickCallBack;
     private Context context;
 
     public AdapterRcPlayer(Context context, ClickCallBack clickCallBack){
         inflater=LayoutInflater.from(context);
+        myVolleySingleton = MyVolleySingleton.getsInstance();
+        requestQueue=myVolleySingleton.getmRequestQueue();
+        imageLoader = myVolleySingleton.getmImageLoader();
         this.context=context;
         this.clickCallBack=clickCallBack;
+        progressDialog = new ProgressDialog(context); persistenTry=0;
     }
     public void setPlayerList(ArrayList<Player> listPlayer){
         this.listPlayer=listPlayer;
+        for (int i=0;i<listPlayer.size();i++){
+            listVisorDetalle.add(false);
+        }
         notifyItemChanged(0,listPlayer.size());
     }
     @Override
@@ -45,7 +83,56 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
 
     @Override
     public void onBindViewHolder(RcPlayerViewHolder holder, int position) {
-        holder.playerNickName.setText(listPlayer.get(position).getNick_name());
+        boolean visorDetalle;
+        Player actPlayer= listPlayer.get(position);
+        visorDetalle=listVisorDetalle.get(position);
+
+        enviarPeticionJson(actPlayer.getCasco(),holder,"pic");
+
+
+        holder.playerNickName.setText(actPlayer.getNick_name());
+      /*  String urlThumnail = "http://ebfiends.esy.es//public//Misc//Vango//Armadura//va_arm_02_reventador_ic_00.jpg";
+        // listPlayer.get(position).getImg_perfil();
+        loadImages(urlThumnail, holder,"pic");*/
+
+        if(!visorDetalle){
+            holder.playerVida.setVisibility(View.VISIBLE);
+            holder.playerAtq.setVisibility(View.VISIBLE);
+            holder.playerDef.setVisibility(View.VISIBLE);
+            holder.playerVida.setText ("Vida:    "+actPlayer.getVida());
+            holder.playerAtq.setText  ("Ataque:  "+actPlayer.getAtq());
+            holder.playerDef.setText  ("Defensa: "+actPlayer.getDef());
+            holder.playerNivel.setVisibility(View.GONE);
+            holder.playerPais.setVisibility(View.GONE);
+            holder.playerEsp.setVisibility(View.GONE);
+            holder.playerImagePerfil.setVisibility(View.GONE);
+            holder.playerImageInfo.setVisibility(View.GONE);
+            holder.showHideButton.setColorFilter(ContextCompat.getColor(context,R.color.colorPrimaryDark));
+        }
+        else{
+            holder.playerVida.setVisibility(View.GONE);
+            holder.playerAtq.setVisibility(View.GONE);
+            holder.playerDef.setVisibility(View.GONE);
+
+
+            holder.playerNivel.setVisibility(View.VISIBLE);
+            holder.playerPais.setVisibility(View.VISIBLE);
+            holder.playerEsp.setVisibility(View.VISIBLE);
+
+            holder.playerNivel.setText("Nivel:   "+actPlayer.getNivel());
+            holder.playerPais.setText ("Pais:    "+actPlayer.getPais());
+            holder.playerEsp.setText  ("Especialidad: "+actPlayer.getEspecialidad());
+
+            holder.playerImagePerfil.setVisibility(View.VISIBLE);
+            holder.playerImageInfo.setVisibility(View.VISIBLE);
+            holder.showHideButton.setColorFilter(ContextCompat.getColor(context,R.color.colorWhite));
+
+            String urlImagePrev= actPlayer.getImg_perfil();
+            loadImages(urlImagePrev,holder,"perfil");
+            String urlImageInfo= actPlayer.getImg_info();
+            loadImages(urlImageInfo,holder,"info");
+        }
+
     }
 
     @Override
@@ -53,32 +140,265 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
         return listPlayer.size();
     }
 
+
+    private void loadImages(String urlThumbnail, final RcPlayerViewHolder holder, final String tipo) {
+        if (!urlThumbnail.equals("NA")) {
+            imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                   if(tipo.equals("pic")){
+                       holder.playerImage.setImageBitmap(response.getBitmap());
+                   }else if(tipo.equals("perfil")){
+                       holder.playerImagePerfil.setImageBitmap(response.getBitmap());
+                   }else if(tipo.equals("info")){
+                       holder.playerImageInfo.setImageBitmap(response.getBitmap());
+                   }
+
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+        }
+    }
+
+
+
+    private  WikiEquipo wikiEquipo = new WikiEquipo();
+    ///Llamados pic Pj////
+    public void enviarPeticionJson(final String codeName, final RcPlayerViewHolder holder, final String tipo){
+
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
+                UrlEP.EBFIENDS_W_EQ+Key.EndPoint.Wk_codeName+codeName
+                , null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        wikiEquipo=parseJsonResponse(response,codeName);
+                        loadImages(wikiEquipo.getImg_ic00(),holder,tipo);
+                        // MiAplicativo.getWritableDatabase().insertMateriaPensumIndividual(listMateria, ma_modulo, true);//IMPORTANTE
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+
+                        auxError = "Fuera de tiempo"; // getString(R.string.error_timeOut);
+                    } else if (error instanceof AuthFailureError) {
+
+                        auxError = "Fallo en ruta"; // getString(R.string.error_AuthFail);
+                    } else if (error instanceof ServerError) {
+
+                        auxError = "Error en la nube";//getString(R.string.error_Server);
+                    } else if (error instanceof NetworkError) {
+
+                        auxError = "Error de Red";//getString(R.string.error_NetWork);
+                    } else if (error instanceof ParseError) {
+
+                        auxError = "Error de conexion";//getString(R.string.error_NetWork);
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            enviarPeticionJson(codeName,holder,tipo);
+                        }
+                    });
+                    alertDialog.show();
+                }else
+                    enviarPeticionJson(codeName,holder,tipo);
+
+
+            }
+        });
+
+        //sin esta linea no se puede hacer la peticion al server
+        requestQueue.add(request);
+    }
+    public WikiEquipo parseJsonResponse(JSONObject response,String codeName){
+        WikiEquipo wikiEquipo = new WikiEquipo();
+
+        //  if(response.has(Key.EndPointMateria.KEY_ESTADO)&&
+        //        !response.isNull(Key.EndPointMateria.KEY_ESTADO))
+
+        if(response==null || response.length()>0){
+            try{
+                progressDialog.dismiss();
+                persistenTry=0;
+
+
+                String CODENAME="NA" ;
+                String NAME="NA" ;
+                String CLASE="NA";
+                String HB1="NA",HB2="NA",HB3="NA",HB4="NA",HB5="NA",HB6="NA" ;
+                String IMG_IC00="NA",IMG_IC01="NA",IMG_IC02="NA",
+                        IMG_IC03="NA",IMG_IC04="NA",IMG_IC05="NA";
+                String IMG_VIEW="NA";
+
+                JSONObject currentWikiEQ= response.getJSONObject(Key.JsGetWikiEquipo.WIKI_EQUIPO);
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.CODENAME)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.CODENAME)){
+                    CODENAME=currentWikiEQ.getString(Key.JsGetWikiEquipo.CODENAME);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.NAME)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.NAME)){
+                    NAME=currentWikiEQ.getString(Key.JsGetWikiEquipo.NAME);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.CLASE)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.CLASE)){
+                    CLASE=currentWikiEQ.getString(Key.JsGetWikiEquipo.CLASE);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.HB1)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.HB1)){
+                    HB1=currentWikiEQ.getString(Key.JsGetWikiEquipo.HB1);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.HB2)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.HB2)){
+                    HB2=currentWikiEQ.getString(Key.JsGetWikiEquipo.HB2);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.HB3)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.HB3)){
+                    HB3=currentWikiEQ.getString(Key.JsGetWikiEquipo.HB3);
+                }
+
+
+
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC00)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC00)){
+                    IMG_IC00=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC00);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC01)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC01)){
+                    IMG_IC01=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC01);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC02)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC02)){
+                    IMG_IC02=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC02);
+                }
+
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC03)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC03)){
+                    IMG_IC03=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC03);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC04)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC04)){
+                    IMG_IC04=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC04);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC05)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC05)){
+                    IMG_IC05=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC05);
+                }
+                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_VIEW)&&
+                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_VIEW)){
+                    IMG_VIEW=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_VIEW);
+                }
+
+                wikiEquipo.setCodeName(CODENAME);
+                wikiEquipo.setName(NAME);
+                wikiEquipo.setClase(CLASE);
+
+                wikiEquipo.setHb1(HB1);wikiEquipo.setHb2(HB2);wikiEquipo.setHb3(HB3);
+                wikiEquipo.setHb4(HB4);wikiEquipo.setHb5(HB5);wikiEquipo.setHb6(HB6);
+
+                wikiEquipo.setImg_ic00(IMG_IC00);wikiEquipo.setImg_ic01(IMG_IC01);wikiEquipo.setImg_ic02(IMG_IC02);
+                wikiEquipo.setImg_ic03(IMG_IC03);wikiEquipo.setImg_ic04(IMG_IC04);wikiEquipo.setImg_ic05(IMG_IC05);
+
+                wikiEquipo.setImg_view(IMG_VIEW);
+
+
+
+            }catch (JSONException e){
+                e.printStackTrace();
+            }
+        }
+
+
+        return wikiEquipo;
+    }
+
+
+
     public  class RcPlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         RelativeLayout relativeLayout;
-        ImageView playerImage;
-        TextView playerNickName,playerInfo;
+        ImageView playerImage, playerImagePerfil,playerImageInfo;
+        ImageView showHideButton;
+        TextView playerNickName;
+        TextView playerVida,playerAtq,playerDef,playerNivel,playerPais,playerEsp;
 
         public RcPlayerViewHolder(View itemView) {
             super(itemView);
             relativeLayout=(RelativeLayout)itemView.findViewById(R.id.bodyRelative);
             playerImage=(ImageView)itemView.findViewById(R.id.playerImage);
+            playerImagePerfil=(ImageView)itemView.findViewById(R.id.playerImagePerfil);
+            playerImageInfo=(ImageView)itemView.findViewById(R.id.playerImageInfo);
+            showHideButton=(ImageView)itemView.findViewById(R.id.showOrHideContentButton);
+
             playerNickName=(TextView)itemView.findViewById(R.id.playerNickName);
-            playerNickName=(TextView)itemView.findViewById(R.id.playerInfo);
+            playerVida=(TextView)itemView.findViewById(R.id.playerVida);
+            playerAtq=(TextView)itemView.findViewById(R.id.playerAtaque);
+            playerDef=(TextView)itemView.findViewById(R.id.playerDefensa);
+            playerNivel=(TextView)itemView.findViewById(R.id.playerNivel);
+            playerPais=(TextView)itemView.findViewById(R.id.playerPais);
+            playerEsp=(TextView)itemView.findViewById(R.id.playerEspecialidad);
 
             relativeLayout.setOnClickListener(this);
+            showHideButton.setOnClickListener(this);
 
         }
 
         @Override
         public void onClick(View v) {
             if(v==v.findViewById(R.id.bodyRelative)){
-                L.t(context,"Jugador: "+getAdapterPosition()+1 );
+                L.t(context,"Jugador: "+(getAdapterPosition()+1) );
             }
             if(v==v.findViewById(R.id.subItemImage01)){
 
             }
             if (v==v.findViewById(R.id.subItemImage02)){
 
+            }
+            if(v==v.findViewById(R.id.showOrHideContentButton)){
+                boolean visorDetalle;
+                visorDetalle=listVisorDetalle.get(getAdapterPosition());
+                if(visorDetalle==true){
+                    listVisorDetalle.set(getAdapterPosition(),false);
+                }
+                else if(visorDetalle==false){
+                    listVisorDetalle.set(getAdapterPosition(),true);
+                }
+                notifyItemChanged(getAdapterPosition());
             }
         }
     }
