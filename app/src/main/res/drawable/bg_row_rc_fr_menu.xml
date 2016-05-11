@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" >
+        <shape>
+            <solid android:color="@color/colorAccent"></solid>
+        </shape>
+    </item>
+
+    <item>
+        <layer-list>
+            <item>
+                <shape
+                    android:padding="5dp"
+                    android:shape="rectangle">
+                    <solid android:color="@color/colorBgRcMenu" />  <!--> si no quieres una imagen -->
+                    <corners
+                        android:bottomLeftRadius="7dp"
+                        android:bottomRightRadius="7dp"
+                        android:topLeftRadius="7dp"
+                        android:topRightRadius="7dp" />
+
+                </shape>
+            </item>
+          <!--  <item android:drawable="@drawable/esquina_prueba" /> IMAGEN al BG se recomienda hacer buenos calculos-->
+        </layer-list>
+    </item>
+
+</selector>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginTop="5dp"
+    android:id="@+id/bodyRelative"
+    android:background="@drawable/bg_row_rc_fr_menu"
+    android:clickable="true">
+
+    <ImageView
+        android:id="@+id/itemImagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/itemTitulo"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.87"
+        android:gravity="center"
+        android:padding="4dp"
+        android:layout_marginBottom="10dp"
+        android:text="Ingenieria Sistemas"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:shadowColor="@color/colorWhite"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/itemImagen"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/linearLayout">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:clickable="true"
+            android:background="@color/colorWhite"
+            android:id="@+id/subItemImage01"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="gone"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:clickable="true"
+            android:background="@color/colorWhite"
+            android:id="@+id/subItemImage02"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_menu_base_02"
+        android:layout_below="@+id/itemTitulo"
+        android:layout_centerHorizontal="true"/>
+
+
+</RelativeLayout>

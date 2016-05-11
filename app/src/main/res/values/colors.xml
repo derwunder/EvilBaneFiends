@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorWhite">#FFF</color>
+    <color name="colorPrimary">#4E342E</color>
+    <color name="colorPrimaryDark">#3E2723</color>
+    <color name="colorPrimaryLight">#CFD8DC</color>
+    <color name="colorAccent">#FFCA28</color>
+    <color name="colorAccentFF">#8040C4FF</color>
+    <color name="colorTextPrimary">#212121</color>
+    <color name="colorTextSecondary">#727272</color>
+
+    <color name="colorTextPrimaryDARK">#FAFAFA</color>
+    <color name="colorTextSecondaryDARK">#EEEEEE</color>
+    <color name="colorBackgroundDARK">#795548</color>
+    <color name="colorBgGris">#616161</color>
+
+
+    <color name="colorBackground">#795548</color>
+    <color name="coloGrisClaro">#F5F5F5</color>
+    <color name="colorGris700">#757575</color>
+    <!--E8EAF6 previus background -->
+
+    <!-- Colors RC BG MENU -->
+    <color name="colorBgRcMenu">#5D4037</color>
+
+
+    <!-- Colors MENUUUUU -->
+    <color name="colorTextMenuGreen">#09b985</color>
+    <color name="colorTextMenuYellow">#cb901d</color>
+    <color name="colorTextMenuRed">#e20f0f</color>
+    <color name="colorTextMenuBlue">#1977c7</color>
+
+
+    <color name="event_color_01">#59dbe0</color>
+    <color name="event_color_02">#f57f68</color>
+    <color name="event_color_03">#87d288</color>
+    <color name="event_color_04">#f8b552</color>
+
+    <color name="ut_examen_color">#3F51B5</color>
+    <color name="ut_expo_color">#5C6BC0</color>
+    <color name="ut_taller_color">#7986CB</color>
+    <color name="ut_otro_color">#9FA8DA</color>
+
+
+
+</resources>

@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">EvilBane Fiends</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">close</string>
+
+    <!-- TODO: VARIABLES NAV MENU-->
+
+    <string name="hello_world">Hello world!</string>
+    <string name="navigation_item_1">Inicio</string>
+    <string name="navigation_item_2">USM Web</string>
+    <string name="navigation_item_3">Item 3</string>
+    <string name="navigation_item_4">Item 4</string>
+    <string name="navigation_item_5">Item 5</string>
+
+    <string name="comparte_item_1">Transmite</string>
+    <string name="comparte_item_2">Envia</string>
+
+    <string name="title_activity_second">Second</string>
+    <string name="text_second_activity">Hi Its Second Activity Here</string>
+    <string name="title_activity_third">Third</string>
+    <string name="text_third_activity">Hi Its Third Activity</string>
+    <string name="text_dismiss">Dismiss</string>
+    <string name="title_activity_fourth">Mr Four</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_act_apertura">ActApertura</string>
+    <string name="error_timeOut">Conexion fuera de Tiempo</string>
+    <string name="error_AuthFail">Autenticacion Fallida</string>
+    <string name="error_Server">No se a Conectado al Sevidor</string>
+    <string name="error_NetWork">Fallo de Conexion</string>
+    <string name="error_Parse">Perdida de Datos</string>
+    <string name="action_person">Act Per</string>
+    <string name="action_search">search</string>
+
+    <!-- TODO: VARIABLES ACT LAUNCH -->
+    <string name="prof_invalid">Codigo Invalido</string>
+    <string name="volley_error_time">FUERA DE CONEXION o FIN DE TIEMPO</string>
+    <string name="volley_error_time1">FUERA DE CONEXION o</string>
+    <string name="volley_error_time2">FIN DE TIEMPO</string>
+    <string name="volley_error_aut">FALLO DE RUTAAA</string>
+    <string name="volley_error_serv">ERROR CON EL SERVER</string>
+    <string name="volley_error_net">ERROR EN LA RED</string>
+    <string name="volley_error_par">ERROR DE PARSEO</string>
+
+
+</resources>
