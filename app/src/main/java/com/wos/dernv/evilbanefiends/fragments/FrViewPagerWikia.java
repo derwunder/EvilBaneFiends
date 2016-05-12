@@ -51,8 +51,16 @@ public class FrViewPagerWikia extends Fragment {
         viewPager.setAdapter(adapterViewPagerWikia);
 
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setText("FR 1");
-        tabLayout.getTabAt(1).setText("FR 2");
+        tabLayout.getTabAt(0).setText("Personajes");
+        tabLayout.getTabAt(1).setText("Habilidades");
+        tabLayout.getTabAt(2).setText("Consumibles");
+        tabLayout.getTabAt(3).setText("Mundo");
+        tabLayout.getTabAt(4).setText("Equipamento");
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        //tabLayout.getTabAt(1).setIcon(R.drawable.ic_insert_invitation_white_24dp);
+        // tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);
+        // tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         return rootView; // super.onCreateView(inflater, container, savedInstanceState);

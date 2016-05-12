@@ -27,6 +27,7 @@ import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrPlayerActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrViewPagerWikia;
+import com.wos.dernv.evilbanefiends.fragments.FrWebViewActMain;
 import com.wos.dernv.evilbanefiends.logs.L;
 
 public class ActivityMain extends AppCompatActivity
@@ -61,6 +62,7 @@ public class ActivityMain extends AppCompatActivity
         iniFab();
 
         mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+        mAppBarLayout.setExpanded(true,true);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -93,7 +95,46 @@ public class ActivityMain extends AppCompatActivity
     }
     public void iniFab(){
         mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setVisibility(View.VISIBLE);
+        mFab.setImageResource(R.drawable.ic_home_white_48dp);
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAppBarLayout.setExpanded(true, true);
+                mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+                //Notice how the Coordinator Layout object is used here
+                stateBackPress=0;
+                Snackbar.make(mCoordinator, getResources().getString(R.string.fab_home),
+                        Snackbar.LENGTH_SHORT).setAction("DISMISS", null).show();
+                fragmentChanger("menu");
+            }
+        });
 
+    }
+
+    public void fragmentChanger(String where){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(where.equals("menu")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrMenuActMain.newInstance())
+                    .commit();
+        }else if(where.equals("jugador")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrPlayerActMain.newInstance())
+                    .commit();
+        }else if(where.equals("eqPerfecto")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrEqPerfectoActMain.newInstance())
+                    .commit();
+        }else if(where.equals("wikia")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrViewPagerWikia.newInstance())
+                    .commit();
+        }else if(where.equals("web")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrWebViewActMain.newInstance())
+                    .commit();
+        }
     }
 
     @Override
@@ -102,10 +143,7 @@ public class ActivityMain extends AppCompatActivity
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }else if(stateBackPress==1000){
             stateBackPress=0;
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.contenedor_base, FrMenuActMain.newInstance())
-                    .commit();
+            fragmentChanger("menu");
         }
 
         else{
@@ -136,32 +174,40 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        return false;
+        int id = item.getItemId();
+
+        if (id == R.id.navigation_item_1) {
+            mAppBarLayout.setExpanded(true, true);
+            mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+            fragmentChanger("menu");
+        } else if (id == R.id.navigation_item_2) {
+            mAppBarLayout.setExpanded(false, true);
+            mCollapsingToolbarLayout.setTitle("Fan Page Fiends");
+            fragmentChanger("web");
+        }
+        stateBackPress=0;
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override
     public void onRSCItemMenuSelected(int position) {
         L.t(this,"Menu: "+position);
         if(position==1){
+
+            mAppBarLayout.setExpanded(true,true);
+            mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+
             stateBackPress=1000;
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.contenedor_base, FrPlayerActMain.newInstance())
-                    .commit();
+            fragmentChanger("jugador");
         }
         if(position==2){
             stateBackPress=1000;
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.contenedor_base, FrEqPerfectoActMain.newInstance())
-                    .commit();
+            fragmentChanger("eqPerfecto");
         }
         if(position==4){
             stateBackPress=1000;
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.contenedor_base, FrViewPagerWikia.newInstance())
-                    .commit();
+            fragmentChanger("wikia");
         }
     }
 }

@@ -35,4 +35,24 @@ public interface Key {
         String ORIGEN="origen",USUARIO="usuario",DETALLE="detalle";
         String IMG_ROOT="img_root";
     }
+    interface JsGetWikiPersonaje{
+        String WIKI_PERSONAJE="wikiPersonaje";
+        String CLASE="clase",VIDA="vida",ATQ="atq",DEF="def",AGI="agi";
+        String DETALLE="detalle",IMG_PIC="img_pic",IMG_VIEW="img_view";
+    }
+    interface JsGetWikiHab{
+        String WIKI_HABILIDAD="wikiHabilidad";
+        String TIPO="tipo";
+        String DETALLE="detalle",IMG="img";
+    }
+    interface JsGetWikiMoneda{
+        String WIKI_MONEDA="wikiMoneda";
+        String TIPO="tipo";
+        String DETALLE="detalle",IMG="img";
+    }
+    interface JsGetWikiMundo{
+        String WIKI_MUNDO="wikiMundo";
+        String TIPO="tipo";
+        String DETALLE="detalle",IMG="img";
+    }
 }

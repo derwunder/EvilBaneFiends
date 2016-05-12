@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="5dp"
+    android:id="@+id/bodyRelative"
+    android:background="@drawable/bg_row_rc_fr_menu"
+    android:clickable="true" >
+
+
+    <ImageView
+        android:layout_weight="1"
+        android:id="@+id/mundoImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <LinearLayout
+        android:id="@+id/contenedorPrincipal"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/mundoImage"
+        >
+
+
+
+        <LinearLayout
+            android:layout_weight="3"
+            android:id="@+id/contenedorInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/mundoTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.87"
+                android:gravity="left"
+                android:padding="4dp"
+                android:textColor="@color/colorTextPrimary"
+                android:text="Ingenieria Sistemas"
+                android:textSize="22sp" />
+
+            <ImageView
+                android:id="@+id/imgJump"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu_base_02" />
+
+            <TextView
+                android:id="@+id/mundoDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:alpha="0.87"
+                android:padding="4dp"
+                android:textColor="@color/colorTextPrimary"
+                android:text="Paarrollo del mismo "
+                android:textSize="14sp" />
+
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:visibility="gone"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/showOrHideContentButton"
+            android:src="@drawable/ic_visibility_black_36dp"       />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

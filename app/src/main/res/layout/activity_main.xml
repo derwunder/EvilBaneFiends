@@ -120,10 +120,12 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
+        app:theme="@style/AppNavigation"
         android:id="@+id/navigation_drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemBackground="@color/colorWhite"
         app:headerLayout="@layout/activity_main_nav_header"
         app:menu="@menu/menu_actvity_main_nav" />
 
