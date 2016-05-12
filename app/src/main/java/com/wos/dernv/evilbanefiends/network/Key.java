@@ -28,4 +28,11 @@ public interface Key {
                  IMG_IC03="img_ic03",IMG_IC04="img_ic04",IMG_IC05="img_ic05";
          String IMG_VIEW="img_view";
     }
+    interface JsGetEqPerfecto{
+        String EQUIPOPERFECTO="equipoPerfecto";
+        String CODE_NAME="code_name";
+        String AL1="al1",AL2="al2",AL3="al3";
+        String ORIGEN="origen",USUARIO="usuario",DETALLE="detalle";
+        String IMG_ROOT="img_root";
+    }
 }

@@ -23,8 +23,10 @@ import android.widget.TextView;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
+import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrPlayerActMain;
+import com.wos.dernv.evilbanefiends.fragments.FrViewPagerWikia;
 import com.wos.dernv.evilbanefiends.logs.L;
 
 public class ActivityMain extends AppCompatActivity
@@ -145,6 +147,20 @@ public class ActivityMain extends AppCompatActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrPlayerActMain.newInstance())
+                    .commit();
+        }
+        if(position==2){
+            stateBackPress=1000;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrEqPerfectoActMain.newInstance())
+                    .commit();
+        }
+        if(position==4){
+            stateBackPress=1000;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrViewPagerWikia.newInstance())
                     .commit();
         }
     }
