@@ -93,6 +93,7 @@ public class FrWikiHab extends Fragment {
                 new OffsetDecorationRC(75,35,getContext().getResources().getDisplayMetrics().density);
         rcWikiHab.addItemDecoration(offsetDecorationRC);
         rcWikiHab.setAdapter(adapterRcWikiHab);
+        rcWikiHab.setNestedScrollingEnabled(false);
 
         return rootView  ;
     }

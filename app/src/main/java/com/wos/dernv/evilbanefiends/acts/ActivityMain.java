@@ -127,6 +127,7 @@ public class ActivityMain extends AppCompatActivity
                     .replace(R.id.contenedor_base, FrEqPerfectoActMain.newInstance())
                     .commit();
         }else if(where.equals("wikia")){
+            mAppBarLayout.setExpanded(false,false);
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrViewPagerWikia.newInstance())
                     .commit();
@@ -143,6 +144,7 @@ public class ActivityMain extends AppCompatActivity
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }else if(stateBackPress==1000){
             stateBackPress=0;
+            mAppBarLayout.setExpanded(true,true);
             fragmentChanger("menu");
         }
 
@@ -192,20 +194,28 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     public void onRSCItemMenuSelected(int position) {
-        L.t(this,"Menu: "+position);
+
         if(position==1){
 
-            mAppBarLayout.setExpanded(true,true);
-            mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
+            mAppBarLayout.setExpanded(false,true);
+            mCollapsingToolbarLayout.setTitle("Jugadores Del Clan");
 
             stateBackPress=1000;
             fragmentChanger("jugador");
         }
         if(position==2){
+
+            mAppBarLayout.setExpanded(false,true);
+            mCollapsingToolbarLayout.setTitle("Equipamento Perfecto");
+
             stateBackPress=1000;
             fragmentChanger("eqPerfecto");
         }
         if(position==4){
+
+            mAppBarLayout.setExpanded(false,true);
+            mCollapsingToolbarLayout.setTitle("Wikia Por Fiends");
+
             stateBackPress=1000;
             fragmentChanger("wikia");
         }

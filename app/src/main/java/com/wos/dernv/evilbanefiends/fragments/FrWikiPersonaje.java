@@ -96,6 +96,7 @@ public class FrWikiPersonaje extends Fragment {
                 new OffsetDecorationRC(75,35,getContext().getResources().getDisplayMetrics().density);
         rcWikiPersonaje.addItemDecoration(offsetDecorationRC);
         rcWikiPersonaje.setAdapter(adapterRcWikiPersonaje);
+        rcWikiPersonaje.setNestedScrollingEnabled(false);
 
         return rootView  ;
     }

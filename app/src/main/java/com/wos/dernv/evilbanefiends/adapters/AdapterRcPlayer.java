@@ -381,7 +381,7 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
         @Override
         public void onClick(View v) {
             if(v==v.findViewById(R.id.bodyRelative)){
-                L.t(context,"Jugador: "+(getAdapterPosition()+1) );
+
             }
             if(v==v.findViewById(R.id.subItemImage01)){
 

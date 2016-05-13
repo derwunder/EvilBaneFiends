@@ -126,7 +126,7 @@ public class AdapterRcWikiMundo extends RecyclerView.Adapter<AdapterRcWikiMundo.
         @Override
         public void onClick(View v) {
             if(v==v.findViewById(R.id.bodyRelative)){
-                L.t(context,"Jugador: "+(getAdapterPosition()+1) );
+
             }
             if(v==v.findViewById(R.id.subItemImage01)){
 

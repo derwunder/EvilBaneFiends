@@ -95,6 +95,7 @@ public class FrWikiMundo extends Fragment {
                 new OffsetDecorationRC(75,35,getContext().getResources().getDisplayMetrics().density);
         rcWikiMundo.addItemDecoration(offsetDecorationRC);
         rcWikiMundo.setAdapter(adapterRcWikiMundo);
+        rcWikiMundo.setNestedScrollingEnabled(false);
 
         return rootView  ;
     }

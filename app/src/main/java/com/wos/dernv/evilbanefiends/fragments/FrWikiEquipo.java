@@ -11,6 +11,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,6 +32,7 @@ import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.adapters.AdapterRcEqPerfecto;
 import com.wos.dernv.evilbanefiends.adapters.AdapterRcWikiEquipo;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
+import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.network.Key;
 import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
 import com.wos.dernv.evilbanefiends.network.UrlEP;
@@ -59,7 +63,15 @@ public class FrWikiEquipo extends Fragment {
     private ProgressDialog progressDialog ;
     private int persistenTry=0;
 
+    private boolean validaAcc;
+    private String claseActiva;
+    private String tipoActivo;
+
     private ArrayList<WikiEquipo> listWikiEquipo= new ArrayList<>();
+    private ArrayList<WikiEquipo> listLukeArm,listLukeCap,listLukeWep;
+    private ArrayList<WikiEquipo> listKharaArm,listKharaCap,listKharaWep;
+    private ArrayList<WikiEquipo> listVangoArm,listVangoCap,listVangoWep;
+    private ArrayList<WikiEquipo> listComun;
 
     public  FrWikiEquipo(){}
 
@@ -82,6 +94,125 @@ public class FrWikiEquipo extends Fragment {
         progressDialog = new ProgressDialog(getContext());
         myVolleySingleton=MyVolleySingleton.getsInstance();
         requestQueue=myVolleySingleton.getmRequestQueue();
+            validaAcc=false;
+            claseActiva="luke";
+            tipoActivo="arm";
+
+        listWikiEquipo= new ArrayList<>();
+        listLukeArm=new ArrayList<>();listLukeCap=new ArrayList<>();listLukeWep=new ArrayList<>();
+        listKharaArm=new ArrayList<>();listKharaCap=new ArrayList<>();listKharaWep=new ArrayList<>();
+        listVangoArm=new ArrayList<>();listVangoCap=new ArrayList<>();listVangoWep=new ArrayList<>();
+       listComun=new ArrayList<>();
+
+        enviarPeticionJson();
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_wiki_equipo, menu);
+        menu.findItem(R.id.action_luke).setChecked(true);
+        menu.findItem(R.id.action_arm).setChecked(true);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        if(!claseActiva.equals("comun")) {
+            if (tipoActivo.equals("arm")) {
+                menu.findItem(R.id.action_tipo).setIcon(R.drawable.ic_arm_00);
+            } else if (tipoActivo.equals("cap")) {
+                menu.findItem(R.id.action_tipo).setIcon(R.drawable.ic_cap_00);
+            } else if (tipoActivo.equals("wep")) {
+                menu.findItem(R.id.action_tipo).setIcon(R.drawable.ic_wep_00);
+            }
+        }
+
+        if(claseActiva.equals("luke")){
+            menu.findItem(R.id.action_luke).setChecked(true);
+            menu.findItem(R.id.action_arm).setChecked(true);
+            menu.findItem(R.id.action_clase).setIcon(R.drawable.ic_luke_00);
+            menu.findItem(R.id.action_tipo).setVisible(true);
+        }else if(claseActiva.equals("khara")){
+            menu.findItem(R.id.action_khara).setChecked(true);
+            menu.findItem(R.id.action_arm).setChecked(true);
+            menu.findItem(R.id.action_clase).setIcon(R.drawable.ic_khara_00);
+            menu.findItem(R.id.action_tipo).setVisible(true);
+        }else if(claseActiva.equals("vango")){
+            menu.findItem(R.id.action_vango).setChecked(true);
+            menu.findItem(R.id.action_arm).setChecked(true);
+            menu.findItem(R.id.action_clase).setIcon(R.drawable.ic_vango_00);
+            menu.findItem(R.id.action_tipo).setVisible(true);
+        }else if(claseActiva.equals("comun")){
+            menu.findItem(R.id.action_comun).setChecked(true);
+            menu.findItem(R.id.action_clase).setIcon(R.drawable.ic_acc_00);
+            menu.findItem(R.id.action_tipo).setVisible(false);
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_luke: {
+                item.setChecked(!item.isChecked());
+                claseActiva="luke"; tipoActivo="arm";
+                adapterRcWikiEquipo.setEqPerfectoList(listLukeArm);
+                getActivity().invalidateOptionsMenu();
+
+            }break;
+            case R.id.action_khara: {
+                item.setChecked(!item.isChecked());
+                claseActiva="khara"; tipoActivo="arm";
+                adapterRcWikiEquipo.setEqPerfectoList(listKharaArm);
+                getActivity().invalidateOptionsMenu();
+            }break;
+            case R.id.action_vango: {
+                item.setChecked(!item.isChecked());
+                claseActiva="vango"; tipoActivo="arm";
+                adapterRcWikiEquipo.setEqPerfectoList(listVangoArm);
+                getActivity().invalidateOptionsMenu();
+            }break;
+            case R.id.action_comun: {
+                item.setChecked(!item.isChecked());
+                claseActiva="comun";
+                adapterRcWikiEquipo.setEqPerfectoList(listComun);
+                getActivity().invalidateOptionsMenu();
+            }break;
+            case R.id.action_arm: {
+                item.setChecked(!item.isChecked());
+                tipoActivo="arm";
+                if(claseActiva.equals("luke")){adapterRcWikiEquipo.setEqPerfectoList(listLukeArm);}
+                else if(claseActiva.equals("khara")){adapterRcWikiEquipo.setEqPerfectoList(listKharaArm);}
+                else if(claseActiva.equals("vango")){adapterRcWikiEquipo.setEqPerfectoList(listVangoArm);}
+                getActivity().invalidateOptionsMenu();
+
+            }break;
+            case R.id.action_cap: {
+                item.setChecked(!item.isChecked());
+                tipoActivo="cap";
+                if(claseActiva.equals("luke")){adapterRcWikiEquipo.setEqPerfectoList(listLukeCap);}
+                else if(claseActiva.equals("khara")){adapterRcWikiEquipo.setEqPerfectoList(listKharaCap);}
+                else if(claseActiva.equals("vango")){adapterRcWikiEquipo.setEqPerfectoList(listVangoCap);}
+                getActivity().invalidateOptionsMenu();
+            }break;
+            case R.id.action_wep: {
+                item.setChecked(!item.isChecked());
+                tipoActivo="wep";
+                if(claseActiva.equals("luke")){adapterRcWikiEquipo.setEqPerfectoList(listLukeWep);}
+                else if(claseActiva.equals("khara")){adapterRcWikiEquipo.setEqPerfectoList(listKharaWep);}
+                else if(claseActiva.equals("vango")){adapterRcWikiEquipo.setEqPerfectoList(listVangoWep);}
+                getActivity().invalidateOptionsMenu();
+            }break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -92,11 +223,14 @@ public class FrWikiEquipo extends Fragment {
         rcWikiEquipo.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterRcWikiEquipo=new AdapterRcWikiEquipo(getContext(),clickCallBack);
         //setear lista por aca al adaptador
-        enviarPeticionJson();
+        //adapterRcWikiEquipo.setEqPerfectoList(listLukeArm);
+
+
         OffsetDecorationRC offsetDecorationRC=
                 new OffsetDecorationRC(75,35,getContext().getResources().getDisplayMetrics().density);
         rcWikiEquipo.addItemDecoration(offsetDecorationRC);
         rcWikiEquipo.setAdapter(adapterRcWikiEquipo);
+        rcWikiEquipo.setNestedScrollingEnabled(false);
 
         return rootView  ;
     }
@@ -119,7 +253,8 @@ public class FrWikiEquipo extends Fragment {
 
                         listWikiEquipo=parseJsonResponse(response);
                         // MiAplicativo.getWritableDatabase().insertMateriaPensumIndividual(listMateria, ma_modulo, true);//IMPORTANTE
-                        adapterRcWikiEquipo.setEqPerfectoList(listWikiEquipo);
+                       // adapterRcWikiEquipo.setEqPerfectoList(listWikiEquipo);
+                        hacedorDeListas(listWikiEquipo);
 
                     }
                 }, new Response.ErrorListener() {
@@ -303,6 +438,47 @@ public class FrWikiEquipo extends Fragment {
     }
 
 
+    //Crear listas de la Wiki
+    public void hacedorDeListas(ArrayList<WikiEquipo> listWikiEquipo){
+        listLukeArm= cicloDelHacedor("lu","arm");
+        listLukeCap= cicloDelHacedor("lu","cap");
+        listLukeWep= cicloDelHacedor("lu","wep");
+
+        listKharaArm= cicloDelHacedor("kh","arm");
+        listKharaCap= cicloDelHacedor("kh","cap");
+        listKharaWep= cicloDelHacedor("kh","wep");
+
+        listVangoArm= cicloDelHacedor("va","arm");
+        listVangoCap= cicloDelHacedor("va","cap");
+        listVangoWep= cicloDelHacedor("va","wep");
+
+        listComun= cicloDelHacedor("co","acc");
+        adapterRcWikiEquipo.setEqPerfectoList(listLukeArm);
+
+      /*  String code=listLukeArm.get(0).getCodeName();
+        String auxClase="", auxTipo="";
+        auxClase= code.substring(0,2);
+        auxTipo= code.substring(4,7);
+        L.t(getContext(),"clase: "+auxClase+" tipo: "+auxTipo);*/
+
+    }
+    public ArrayList<WikiEquipo> cicloDelHacedor(String clase,String tipo){
+
+        ArrayList<WikiEquipo> listReturn= new ArrayList<>();
+
+        for(int i=0;i<listWikiEquipo.size();i++){
+            String auxClase="", auxTipo="";
+            String auxCodeName = listWikiEquipo.get(i).getCodeName();
+            auxClase= auxCodeName.substring(0,2);
+            auxTipo= auxCodeName.substring(4,7);
+            if(auxClase.equals(clase)&& auxTipo.equals(tipo)){
+                listReturn.add(listWikiEquipo.get(i));
+            }
+        }
+
+        return listReturn;
+    }
+
 
 
     //CLass DECORADOR PARA LINEAR RC ESPACIO AL FINAL
@@ -344,5 +520,11 @@ public class FrWikiEquipo extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().invalidateOptionsMenu();
     }
 }

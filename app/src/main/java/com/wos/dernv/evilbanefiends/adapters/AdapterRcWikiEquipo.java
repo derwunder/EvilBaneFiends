@@ -55,7 +55,8 @@ public class AdapterRcWikiEquipo extends RecyclerView.Adapter<AdapterRcWikiEquip
         for (int i=0;i<listWikiEquipo.size();i++){
             listVisorDetalle.add(false);
         }
-        notifyItemChanged(0,listWikiEquipo.size());
+        notifyDataSetChanged();
+       // notifyItemChanged(0,listWikiEquipo.size());
     }
 
     @Override
@@ -197,7 +198,7 @@ public class AdapterRcWikiEquipo extends RecyclerView.Adapter<AdapterRcWikiEquip
         @Override
         public void onClick(View v) {
             if(v==v.findViewById(R.id.bodyRelative)){
-                L.t(context,"Jugador: "+(getAdapterPosition()+1) );
+
             }
             if(v==v.findViewById(R.id.subItemImage01)){
 

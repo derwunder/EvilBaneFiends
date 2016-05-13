@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_clase"
+        android:icon="@drawable/ic_luke_00"
+        android:title="Clase"
+        android:orderInCategory="100"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/groupByClase"
+                android:checkableBehavior="single" >
+                <item
+                    android:id="@+id/action_luke"
+                    android:icon="@drawable/ic_luke_00"
+                    android:title="Luke"
+                    android:orderInCategory="100"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_khara"
+                    android:icon="@drawable/ic_khara_00"
+                    android:title="Khara"
+                    android:orderInCategory="200"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_vango"
+                    android:icon="@drawable/ic_vango_00"
+                    android:title="Vango"
+                    android:orderInCategory="300"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_comun"
+                    android:icon="@drawable/ic_acc_00"
+                    android:title="Comun"
+                    android:orderInCategory="400"
+                    app:showAsAction="never" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_tipo"
+        android:icon="@drawable/ic_arm_00"
+        android:title="Tipo"
+        android:orderInCategory="200"
+        app:showAsAction="always">
+        <menu>
+            <group
+                android:id="@+id/groupByTipo"
+                android:checkableBehavior="single" >
+                <item
+                    android:id="@+id/action_arm"
+                    android:icon="@drawable/ic_arm_00"
+                    android:title="Armadura"
+                    android:orderInCategory="100"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_cap"
+                    android:icon="@drawable/ic_cap_00"
+                    android:title="Capa"
+                    android:orderInCategory="100"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_wep"
+                    android:icon="@drawable/ic_wep_00"
+                    android:title="Arma"
+                    android:orderInCategory="200"
+                    app:showAsAction="never" />
+
+
+            </group>
+        </menu>
+    </item>
+
+</menu>

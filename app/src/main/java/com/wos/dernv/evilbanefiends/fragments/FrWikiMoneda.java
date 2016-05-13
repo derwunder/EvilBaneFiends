@@ -96,6 +96,7 @@ public class FrWikiMoneda extends Fragment {
                 new OffsetDecorationRC(75,35,getContext().getResources().getDisplayMetrics().density);
         rcWikiMoneda.addItemDecoration(offsetDecorationRC);
         rcWikiMoneda.setAdapter(adapterRcWikiMoneda);
+        rcWikiMoneda.setNestedScrollingEnabled(false);
 
         return rootView  ;
     }

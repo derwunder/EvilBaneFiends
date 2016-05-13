@@ -125,7 +125,7 @@ public class AdapterRcWikiMoneda extends RecyclerView.Adapter<AdapterRcWikiMoned
         @Override
         public void onClick(View v) {
             if(v==v.findViewById(R.id.bodyRelative)){
-                L.t(context,"Jugador: "+(getAdapterPosition()+1) );
+
             }
             if(v==v.findViewById(R.id.subItemImage01)){
 
