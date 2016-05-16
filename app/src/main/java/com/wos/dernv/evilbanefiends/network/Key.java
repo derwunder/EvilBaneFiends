@@ -8,6 +8,10 @@ public interface Key {
         String Pl_nickName="?nickName=";
         String Wk_codeName="?codeName=";
     }
+    interface Answer{
+        String ESTADO="estado",MSJ="mensaje";
+        String TIPO="tipo";
+    }
     interface JsGetPlayer{
         String ESTADO="estado";
         String JUDADOR="jugador";String JUDADORES="jugadores";

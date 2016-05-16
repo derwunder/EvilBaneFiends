@@ -1,5 +1,9 @@
 package com.wos.dernv.evilbanefiends.acts;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -12,16 +16,29 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.wos.dernv.evilbanefiends.R;
+import com.wos.dernv.evilbanefiends.dialogs.DialogMsjToNotify;
+import com.wos.dernv.evilbanefiends.dialogs.DialogRegiToClan;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
@@ -29,10 +46,25 @@ import com.wos.dernv.evilbanefiends.fragments.FrPlayerActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrViewPagerWikia;
 import com.wos.dernv.evilbanefiends.fragments.FrWebViewActMain;
 import com.wos.dernv.evilbanefiends.logs.L;
+import com.wos.dernv.evilbanefiends.myapp.MyApp;
+import com.wos.dernv.evilbanefiends.network.Key;
+import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
+import com.wos.dernv.evilbanefiends.objects.UserRegistro;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ActivityMain extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,ClickCallBack{
 
+    //Web
+    private MyVolleySingleton myVolleySingleton;
+    private RequestQueue requestQueue;
+    private ProgressDialog progressDialog ;
+    private int persistenTry=0;
 
     //Backk Press
     private int stateBackPress=0;
@@ -41,7 +73,7 @@ public class ActivityMain extends AppCompatActivity
     //Vars para setear el titulo del App Bar
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private AppBarLayout mAppBarLayout;
-    private FloatingActionButton mFab;
+    private FloatingActionButton mFab, mFabMsj;
     private Toolbar mToolbar;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -50,6 +82,11 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //web var Instance
+        myVolleySingleton=MyVolleySingleton.getsInstance();
+        requestQueue=myVolleySingleton.getmRequestQueue();
+        progressDialog = new ProgressDialog(this);persistenTry=0;
 
         //Grupo de Coordinacion para la actividad Base
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
@@ -68,6 +105,12 @@ public class ActivityMain extends AppCompatActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.contenedor_base, FrMenuActMain.newInstance())
                 .commit();
+
+        UserRegistro userRegistro = MyApp.getWritableDatabase().getUserRegistro();
+
+        L.t(this, "Nick: "+userRegistro.getNick_name()+
+                    "\nMiem: "+userRegistro.getMiembro()+
+                    "\nAdmin: "+userRegistro.getAdmin());
 
     }
 
@@ -89,6 +132,22 @@ public class ActivityMain extends AppCompatActivity
         TextView text1=(TextView)view.findViewById(R.id.textNavHeader1);
         TextView text2=(TextView)view.findViewById(R.id.textNavHeader2);
 
+        imgNav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserRegistro userRegistro=MyApp.getWritableDatabase().getUserRegistro();
+
+                if(!userRegistro.getNick_name().equals("noAsig")){
+                     Intent myIntent = new Intent(ActivityMain.this, ActivityUser.class);
+                     startActivity(myIntent);
+                }else {
+                    DialogRegiToClan dialogRegiToClan = new DialogRegiToClan();
+                    dialogRegiToClan.show(getSupportFragmentManager(), "Regi");
+                }
+
+            }
+        });
+
 
 
 
@@ -109,6 +168,22 @@ public class ActivityMain extends AppCompatActivity
                 fragmentChanger("menu");
             }
         });
+
+        mFabMsj =(FloatingActionButton) findViewById(R.id.fabMsj);
+
+        UserRegistro userRegistro =MyApp.getWritableDatabase().getUserRegistro();
+        if(userRegistro.getAdmin().equals("1")){
+            mFabMsj.setVisibility(View.VISIBLE);
+            mFabMsj.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    DialogMsjToNotify dialogMsjToNotify = new DialogMsjToNotify();
+                    dialogMsjToNotify.show(getSupportFragmentManager(), "Notify");
+                    L.t(getApplicationContext(),"Aca enviamos un msj");
+                }
+            });
+        }
 
     }
 
@@ -192,6 +267,8 @@ public class ActivityMain extends AppCompatActivity
         return true;
     }
 
+
+
     @Override
     public void onRSCItemMenuSelected(int position) {
 
@@ -219,5 +296,131 @@ public class ActivityMain extends AppCompatActivity
             stateBackPress=1000;
             fragmentChanger("wikia");
         }
+    }
+
+    @Override
+    public void onRegisterDialogSet(String nickName, String codigo) {
+        L.t(this,"nick: "+nickName+" cd: "+codigo);
+
+        UserRegistro userRegistro = MyApp.getWritableDatabase().getUserRegistro();
+
+
+
+        if(!userRegistro.getDv_regi().equals("noAsig")){
+            sendRegistrationClanToBackend(this,nickName,codigo,userRegistro.getDv_regi());
+        }
+    }
+
+
+    private void sendRegistrationClanToBackend(final Context context, final String nickName,final String codigo,final String regiDV) {
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
+        String url = "http://ebfiends.esy.es/public/registro_al_clan";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("regiClan", "1");
+        map.put("nickName",nickName);
+        map.put("codigo",codigo);
+        map.put("regiDV",regiDV);
+
+        JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
+                url,new JSONObject(map), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
+                try{
+                    String estado="NA",tipo="NA";
+                    if(response.has(Key.Answer.ESTADO)&&
+                            !response.isNull(Key.Answer.ESTADO)){
+                        estado = response.getString(Key.Answer.ESTADO);
+                    }
+                    if(response.has(Key.Answer.TIPO)&&
+                            !response.isNull(Key.Answer.TIPO)){
+                        tipo = response.getString(Key.Answer.TIPO);
+                    }
+
+                    if(estado.equals("1")&& tipo.equals("admin")){
+                        MyApp.getWritableDatabase().updateUserRegistroToAdmin(nickName,"1","1");
+                        L.t(context,"Jugador admin clan activo");
+                    }else if(estado.equals("1")&& tipo.equals("jugador")){
+                        MyApp.getWritableDatabase().updateUserRegistroToAdmin(nickName,"1","0");
+                        L.t(context,"Jugador activo");
+                    }
+
+                    if(estado.equals("2")){
+                        L.t(context,"Fallo en el server");
+                    }
+                    if(estado.equals("3")){
+                        L.t(context,"1- Codigo invalido\n2- muchos dispositivos asociados");
+                    }
+
+
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    error.printStackTrace();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        L.t(context, getResources().getString(R.string.volley_error_time));
+
+                    } else if (error instanceof AuthFailureError) {
+                        L.t(context, getResources().getString(R.string.volley_error_aut));
+
+                    } else if (error instanceof ServerError) {
+                        L.t(context, getResources().getString(R.string.volley_error_serv));
+
+                    } else if (error instanceof NetworkError) {
+                        L.t(context, getResources().getString(R.string.volley_error_net));
+
+                    } else if (error instanceof ParseError) {
+                        L.t(context, getResources().getString(R.string.volley_error_par));
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            sendRegistrationClanToBackend(context, nickName,  codigo,  regiDV);
+                        }
+                    });
+                    alertDialog.show();
+
+                }else
+                {
+                    sendRegistrationClanToBackend(context, nickName,  codigo,  regiDV);
+                }
+            }
+        });
+        requestQueue.add(request);
     }
 }

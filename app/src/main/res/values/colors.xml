@@ -42,5 +42,10 @@
     <color name="ut_otro_color">#9FA8DA</color>
 
 
+    <!-- Para los botones flotantes -->
+    <color name="flotante_msj">#603E2723</color>
+    <color name="flotante_home">#FFCA28</color>
+
+
 
 </resources>

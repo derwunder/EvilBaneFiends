@@ -5,4 +5,5 @@ package com.wos.dernv.evilbanefiends.events;
  */
 public interface ClickCallBack {
     void onRSCItemMenuSelected(int position);
+    void onRegisterDialogSet(String nickName, String codigo);
 }

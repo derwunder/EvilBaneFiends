@@ -10,7 +10,13 @@
         <item name="android:textColorPrimary">@color/colorTextPrimary</item>
         <item name="android:textColorSecondary">@color/colorTextSecondary</item>
         <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogDark</item>
+        <item name="android:dialogTheme">@style/DialogDark</item>
     </style>
+
+    <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog.Alert"></style>
+
+    <style name="DialogDark" parent="Theme.AppCompat.Dialog"></style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionModeOverlay">true</item>
@@ -19,6 +25,7 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="AppLaunch" parent="Theme.AppCompat.Light.NoActionBar">
@@ -40,7 +47,7 @@
         <item name="android:textColorPrimary">@color/colorTextSecondary</item>
         <item name="android:textColorSecondary">@color/colorTextSecondary</item>
     </style>
-<!--
+    <!--
     parent="Theme.AppCompat.Light.DarkActionBar"
     <item name="titleTextColor">@color/colorWhite</item>
     <item name="android:textColorPrimary">@color/colorTextPrimary</item>
