@@ -26,6 +26,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Importate: esta accion realiza esto."
+                android:id="@+id/textAviso" />
+
+
             <LinearLayout
                 android:id="@+id/contenedorDialog"
                 android:layout_width="match_parent"
@@ -43,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="Codigo Admin"
-                        android:id="@+id/textCodigo" />
+                        android:id="@+id/textCodigoAdmin" />
 
                     <EditText
                         android:layout_width="wrap_content"
@@ -52,50 +61,42 @@
                         android:minWidth="120dp"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
-                        android:text="codigo"
-                        android:id="@+id/editTextCodigo" />
+                        android:id="@+id/editTextCodigoAdmin" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="Mensaje"
-                        android:id="@+id/textMensaje" />
+                        android:text="Nuevo codigo Jugador"
+                        android:id="@+id/textCodigoUser" />
+                    <EditText
+                        android:id="@+id/editTextCodigoUser"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="150dp"
+                        android:minWidth="120dp"
+                        android:inputType="textLongMessage"
+                        android:selectAllOnFocus="true"
+                        android:text="codigo"/>
 
 
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+
                     <ImageView
+                        android:layout_weight="1"
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_launcher"
-                        android:id="@+id/imgClan" />
+                        android:id="@+id/imgAccion" />
 
-                    <Spinner
-                        android:layout_width="140dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/spinnerDonde"
-                        android:spinnerMode="dropdown" />
 
-                </LinearLayout>
 
             </LinearLayout>
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxWidth="150dp"
-                android:minWidth="120dp"
-                android:inputType="textLongMessage"
-                android:selectAllOnFocus="true"
-                android:id="@+id/editTextMensaje"
-                android:text="Listo para poner al dia al clan" />
+
 
 
         </LinearLayout>

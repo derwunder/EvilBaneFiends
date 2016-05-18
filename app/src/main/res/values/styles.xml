@@ -15,8 +15,8 @@
     </style>
 
     <style name="AlertDialogDark" parent="Theme.AppCompat.Dialog.Alert"></style>
-
     <style name="DialogDark" parent="Theme.AppCompat.Dialog"></style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionModeOverlay">true</item>

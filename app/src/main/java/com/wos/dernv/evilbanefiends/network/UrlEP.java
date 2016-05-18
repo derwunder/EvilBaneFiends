@@ -14,4 +14,6 @@ public class UrlEP {
     public static final String EBFIENDS_W_MUNDO="http://ebfiends.esy.es/public/wiki_mundo";
     public static final String EBFIENDS_W_PJ="http://ebfiends.esy.es/public/wiki_personaje";
 
+    public static final String EBFIENDS_ADMIN_CODE="http://ebfiends.esy.es/public/admin_code";
+
 }

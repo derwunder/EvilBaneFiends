@@ -10,14 +10,20 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.myapp.MyApp;
+
+import java.util.ArrayList;
 
 /**
  * Created by der_w on 5/15/2016.
@@ -29,6 +35,7 @@ public class DialogRegiToClan extends DialogFragment{
   private  TextView textNickName, textCodigo;
   private  EditText editTextNickName, editTextCodigo;
   private  ImageView imgClan;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -43,8 +50,12 @@ public class DialogRegiToClan extends DialogFragment{
         editTextNickName=(EditText)view.findViewById(R.id.editTextNickName);
         editTextCodigo=(EditText)view.findViewById(R.id.editTextCodigo);
 
+
         editTextNickName.setFilters(new InputFilter[] { new InputFilter.LengthFilter(30) });
         editTextCodigo.setFilters(new InputFilter[] { new InputFilter.LengthFilter(30) });
+
+
+
 
         builder.setView(view)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

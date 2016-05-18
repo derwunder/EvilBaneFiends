@@ -12,6 +12,12 @@ public interface Key {
         String ESTADO="estado",MSJ="mensaje";
         String TIPO="tipo";
     }
+    interface JsGetCatCod {
+        String CATCOD="catCod";
+        String ID="id";
+        String CODIGO = "codigo";
+        String NICK_NAME = "nick_name";
+    }
     interface JsGetPlayer{
         String ESTADO="estado";
         String JUDADOR="jugador";String JUDADORES="jugadores";

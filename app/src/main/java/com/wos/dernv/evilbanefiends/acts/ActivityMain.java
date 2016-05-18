@@ -180,7 +180,6 @@ public class ActivityMain extends AppCompatActivity
 
                     DialogMsjToNotify dialogMsjToNotify = new DialogMsjToNotify();
                     dialogMsjToNotify.show(getSupportFragmentManager(), "Notify");
-                    L.t(getApplicationContext(),"Aca enviamos un msj");
                 }
             });
         }
@@ -311,8 +310,22 @@ public class ActivityMain extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onMsjToClanDialogSet(String codigo,String msj, String donde) {
+        L.t(this,"Cod: "+codigo);
+        L.t(this,"MSJ: "+msj);
+        L.t(this,"Spinner: "+donde);
+        UserRegistro userRegistro=MyApp.getWritableDatabase().getUserRegistro();
+        if(userRegistro.getAdmin().equals("1")){
 
-    private void sendRegistrationClanToBackend(final Context context, final String nickName,final String codigo,final String regiDV) {
+            sendMsjForDeviceToBackend(this, userRegistro.getNick_name(),
+                    codigo, donde, "msj",  msj);
+        }
+    }
+
+
+    private void sendRegistrationClanToBackend(
+            final Context context, final String nickName,final String codigo,final String regiDV) {
         progressDialog.setMessage("Cargando ...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -418,6 +431,116 @@ public class ActivityMain extends AppCompatActivity
                 }else
                 {
                     sendRegistrationClanToBackend(context, nickName,  codigo,  regiDV);
+                }
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    private void sendMsjForDeviceToBackend(
+            final Context context, final String admin,final String codigo,final String donde,
+            final String tipo, final String msj ) {
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
+        String url = "http://ebfiends.esy.es/public/msj_notify";
+
+        Map<String, String> map = new HashMap<>();
+        map.put(donde, "1");
+        map.put("codigo",codigo);
+        map.put("msj",msj);
+        map.put("admin",admin);
+        map.put("tipo",tipo);
+
+
+        JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
+                url,new JSONObject(map), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
+                try{
+                    String estado="NA",mensaje="NA";
+                    if(response.has(Key.Answer.ESTADO)&&
+                            !response.isNull(Key.Answer.ESTADO)){
+                        estado = response.getString(Key.Answer.ESTADO);
+                    }
+                    if(response.has(Key.Answer.MSJ)&&
+                            !response.isNull(Key.Answer.MSJ)){
+                        mensaje = response.getString(Key.Answer.MSJ);
+                    }
+
+                    if(estado.equals("1")){
+                        L.t(context,mensaje);
+                    }else if(estado.equals("2")){
+                        L.t(context,mensaje);
+                    }else if(estado.equals("3")){
+                        L.t(context,mensaje);
+                    }
+
+
+
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    error.printStackTrace();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        L.t(context, getResources().getString(R.string.volley_error_time));
+
+                    } else if (error instanceof AuthFailureError) {
+                        L.t(context, getResources().getString(R.string.volley_error_aut));
+
+                    } else if (error instanceof ServerError) {
+                        L.t(context, getResources().getString(R.string.volley_error_serv));
+
+                    } else if (error instanceof NetworkError) {
+                        L.t(context, getResources().getString(R.string.volley_error_net));
+
+                    } else if (error instanceof ParseError) {
+                        L.t(context, getResources().getString(R.string.volley_error_par));
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            sendMsjForDeviceToBackend(context, admin, codigo, donde, tipo,  msj);
+                        }
+                    });
+                    alertDialog.show();
+
+                }else
+                {
+                    sendMsjForDeviceToBackend(context, admin, codigo, donde, tipo,  msj);
                 }
             }
         });
