@@ -21,26 +21,46 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
+                android:gravity="left"
                 android:orientation="horizontal">
-                <ImageView
-                    android:layout_gravity="right"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:id="@+id/imgEditar"
+                    android:layout_gravity="center|left"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorWhite"
+                    android:text="Datos"
+                    android:id="@+id/textSecDatos" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgExpand"
+                    android:src="@drawable/ic_expand_more_white_36dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgReduce"
+                    android:src="@drawable/ic_expand_less_white_36dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgEditar"
                     android:src="@drawable/ic_mode_edit_white_36dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:id="@+id/imgSave"
+                    android:id="@+id/sdImgSave"
                     android:src="@drawable/ic_save_white_36dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:id="@+id/imgCancel"
+                    android:id="@+id/sdImgCancel"
                     android:src="@drawable/ic_cancel_white_36dp"/>
                 <ImageView
                     android:layout_width="wrap_content"
@@ -51,6 +71,8 @@
             </LinearLayout>
 
             <TableLayout
+                android:visibility="gone"
+                android:id="@+id/secDatos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -284,6 +306,260 @@
                 </TableRow>
             </TableLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_gravity="center|left"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorWhite"
+                    android:text="Equipamento"
+                    android:id="@+id/textSecEQ" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sEQImgExpand"
+                    android:src="@drawable/ic_expand_more_white_36dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sEQImgReduce"
+                    android:src="@drawable/ic_expand_less_white_36dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sEQImgEditar"
+                    android:src="@drawable/ic_mode_edit_white_36dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sEQImgSave"
+                    android:src="@drawable/ic_save_white_36dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sEQImgCancel"
+                    android:src="@drawable/ic_cancel_white_36dp"/>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/secEQ"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/tipoPjContendor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/icPj"
+                        android:src="@drawable/ic_luke_00" />
+
+
+                    <Spinner
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinnerTipoPj"
+                        android:spinnerMode="dialog" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:weightSum="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/tipoPjContendor">
+
+                    <TableLayout
+                        android:layout_weight="1"
+                        android:id="@+id/tableArmadura"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcHelmet"
+                                android:src="@drawable/ic_helmet_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgHelmetWeb"
+                                android:src="@drawable/ic_helmet_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerHelmet"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcArmor"
+                                android:src="@drawable/ic_arm_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgArmortWeb"
+                                android:src="@drawable/ic_arm_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerArmor"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcHand"
+                                android:src="@drawable/ic_hand_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgHandWeb"
+                                android:src="@drawable/ic_hand_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerHand"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcBoot"
+                                android:src="@drawable/ic_boot_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgBootWeb"
+                                android:src="@drawable/ic_boot_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerBoot"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+
+
+                    </TableLayout>
+
+                    <TableLayout
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcWeap"
+                                android:src="@drawable/ic_wep_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgWeapWeb"
+                                android:src="@drawable/ic_wep_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerWeap"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcCap"
+                                android:src="@drawable/ic_cap_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgCapWeb"
+                                android:src="@drawable/ic_cap_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerCap"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgIcAcc"
+                                android:src="@drawable/ic_acc_00"/>
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="2dp"
+                                android:id="@+id/imgAccWep"
+                                android:src="@drawable/ic_acc_00"/>
+                            <Spinner
+                                android:layout_width="120dp"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/spinnerAcc"
+                                android:spinnerMode="dialog" />
+                        </TableRow>
+
+
+                    </TableLayout>
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
 
 
             <ImageView

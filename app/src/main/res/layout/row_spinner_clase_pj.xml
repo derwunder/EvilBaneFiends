@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <ImageView
+        android:id="@+id/imageSpinner"
+        android:layout_width="50dp"
+        android:layout_height="75dp"
+        android:src="@drawable/ic_khara_00"
+        />
+    <TextView
+        android:padding="3dip"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:id="@+id/itemName"
+        android:text="Texto de prueba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/imageSpinner"
+        android:layout_toEndOf="@+id/imageSpinner" />
+
+</RelativeLayout>

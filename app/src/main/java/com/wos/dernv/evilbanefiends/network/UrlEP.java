@@ -16,4 +16,6 @@ public class UrlEP {
 
     public static final String EBFIENDS_ADMIN_CODE="http://ebfiends.esy.es/public/admin_code";
 
+    public static final String EBFIENDS_UPLOAD_TESTER="http://ebfiends.esy.es/public/upload_img_tester";
+
 }
