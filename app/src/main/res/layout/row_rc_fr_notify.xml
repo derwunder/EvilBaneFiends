@@ -11,15 +11,27 @@
     android:clickable="true" >
 
 
+
     <ImageView
-        android:layout_weight="1"
-        android:id="@+id/pjImage"
+        android:id="@+id/imgNoti"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
+    <ImageView
+        android:visibility="invisible"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:id="@+id/imgDelNoti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_white_36dp"
+        android:layout_below="@+id/imgNoti"
+        />
+
 
     <LinearLayout
         android:id="@+id/contenedorPrincipal"
@@ -28,8 +40,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/pjImage"
-        >
+        android:layout_alignBottom="@+id/imgDelNoti"
+        android:layout_toRightOf="@+id/imgDelNoti"
+        android:layout_toEndOf="@+id/imgDelNoti">
 
 
 
@@ -42,7 +55,7 @@
             >
 
             <TextView
-                android:id="@+id/pjName"
+                android:id="@+id/adminName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.87"
@@ -59,7 +72,7 @@
                 android:src="@drawable/ic_menu_base_00" />
 
             <TextView
-                android:id="@+id/pjVida"
+                android:id="@+id/msjText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -67,49 +80,8 @@
                 android:padding="4dp"
                 android:textColor="@color/colorTextPrimary"
                 android:text="Paarrollo del mismo "
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/pjAtaque"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:alpha="0.87"
-                android:padding="4dp"
-                android:textColor="@color/colorTextPrimary"
-                android:text="Paarrollo del mismo "
-                android:textSize="14sp" />
-            <TextView
-                android:id="@+id/pjDefensa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:alpha="0.87"
-                android:padding="4dp"
-                android:textColor="@color/colorTextPrimary"
-                android:text="Paarrollo del mismo "
-                android:textSize="14sp" />
-            <TextView
-                android:visibility="visible"
-                android:id="@+id/pjAgilidad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:alpha="0.87"
-                android:padding="4dp"
-                android:textColor="@color/colorTextPrimary"
-                android:text="Paarrollo del mismo "
-                android:textSize="14sp" />
-            <TextView
-                android:visibility="visible"
-                android:id="@+id/pjDetalle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:alpha="0.87"
-                android:padding="4dp"
-                android:textColor="@color/colorTextPrimary"
-                android:text="Paarrollo del mismo "
-                android:textSize="14sp" />
+                android:textSize="18sp" />
+
 
 
 
@@ -125,30 +97,34 @@
     </LinearLayout>
 
 
-    <ImageView
-        android:visibility="visible"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="5dp"
-        android:id="@+id/pjImageFull"
-        android:foregroundGravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_launcher"
-        android:layout_below="@+id/contenedorPrincipal"
-        android:layout_centerHorizontal="true" />
+
 
     <LinearLayout
-        android:id="@+id/contenedorWebViewPj"
-        android:layout_below="@+id/pjImageFull"
+        android:id="@+id/contenedorWebViewNoti"
+        android:layout_below="@+id/contenedorPrincipal"
+        android:layout_margin="8dp"
+        android:background="@drawable/bg_datos_user_fr"
+        android:layout_width="match_parent"
+        android:layout_height="600dp">
+        <WebView
+            android:layout_margin="3dp"
+            android:id="@+id/webViewNoti"
+            android:layout_width="match_parent"
+            android:layout_height="595dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/contenedorWebViewVideo"
+        android:layout_below="@+id/contenedorWebViewNoti"
         android:layout_margin="8dp"
         android:background="@drawable/bg_datos_user_fr"
         android:layout_width="match_parent"
         android:layout_height="265dp">
-    <WebView
-        android:layout_margin="3dp"
-        android:id="@+id/webViewPj"
-        android:layout_width="match_parent"
-        android:layout_height="260dp"/>
+        <WebView
+            android:layout_margin="3dp"
+            android:id="@+id/webViewVideo"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"/>
     </LinearLayout>
 
 

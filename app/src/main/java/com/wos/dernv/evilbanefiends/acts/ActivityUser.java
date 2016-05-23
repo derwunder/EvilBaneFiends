@@ -1,5 +1,6 @@
 package com.wos.dernv.evilbanefiends.acts;
 
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,6 +12,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -38,6 +40,7 @@ import com.wos.dernv.evilbanefiends.dialogs.DialogAdminCodeEdition;
 import com.wos.dernv.evilbanefiends.dialogs.DialogRegiToClan;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.events.ClickCallBackAdmin;
+import com.wos.dernv.evilbanefiends.fragments.FrUserProfileActUser;
 import com.wos.dernv.evilbanefiends.fragments.FrViewPagerUserActUser;
 import com.wos.dernv.evilbanefiends.fragments.FrViewPagerWikia;
 import com.wos.dernv.evilbanefiends.logs.L;
@@ -70,6 +73,10 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
     private FloatingActionButton mFab;
     private Toolbar mToolbar;
 
+    private String CODIGO;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,12 +99,21 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
        // iniNavDrawer();
         iniFab();
 
+
+        //CODIGO
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            CODIGO = extras.getString("CODIGO");
+        }
+
+
+
         mCollapsingToolbarLayout.setTitle(userRegistro.getNick_name());
         mAppBarLayout.setExpanded(true,true);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.contenedor_base, FrViewPagerUserActUser.newInstance())
+                .replace(R.id.contenedor_base, FrViewPagerUserActUser.newInstance(CODIGO))
                 .commit();
 
 
@@ -144,6 +160,16 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
 
     sendAdminCodeEditionToBackend(this,accion,codigoAdmin,codigoJugadorOld,codigoJugadorNew,idInCatCod);
 
+    }
+
+    @Override
+    public void reCalFrProfile() {
+        userRegistro=MyApp.getWritableDatabase().getUserRegistro();
+        mCollapsingToolbarLayout.setTitle(userRegistro.getNick_name());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.contenedor_base, FrViewPagerUserActUser.newInstance(CODIGO))
+                .commit();
     }
 
 
@@ -260,7 +286,12 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
     }
 
 
-
-
-
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if(fragment instanceof FrUserProfileActUser){
+            FrUserProfileActUser frUserProfileActUser=(FrUserProfileActUser)fragment;
+            frUserProfileActUser.setInstanceOfFr(frUserProfileActUser);
+        }
+    }
 }

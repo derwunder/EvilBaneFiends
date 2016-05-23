@@ -16,16 +16,18 @@ import com.wos.dernv.evilbanefiends.fragments.FrWikiPersonaje;
  * Created by der_w on 5/16/2016.
  */
 public class AdapterViewPagerUser extends FragmentStatePagerAdapter {
-
+    private String CODIGO;
     public AdapterViewPagerUser(FragmentManager fm) {
         super(fm);
     }
-
+    public void setCODIGO(String CODIGO){
+        this.CODIGO=CODIGO;
+    }
     @Override
     public Fragment getItem(int position) {
         Fragment fragment=null;
         switch (position){
-            case 0: fragment = FrUserProfileActUser.newInstance(); break;
+            case 0: fragment = FrUserProfileActUser.newInstance(CODIGO); break;
             case 1: fragment = FrAdminCodeEditionActUser.newInstance(); break;
 
         }

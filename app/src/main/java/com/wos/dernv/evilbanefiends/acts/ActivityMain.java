@@ -38,10 +38,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.dialogs.DialogMsjToNotify;
+import com.wos.dernv.evilbanefiends.dialogs.DialogPassUserProfile;
 import com.wos.dernv.evilbanefiends.dialogs.DialogRegiToClan;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
+import com.wos.dernv.evilbanefiends.fragments.FrNotifyActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrPlayerActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrViewPagerWikia;
 import com.wos.dernv.evilbanefiends.fragments.FrWebViewActMain;
@@ -99,13 +101,13 @@ public class ActivityMain extends AppCompatActivity
         iniFab();
 
         mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
-        mAppBarLayout.setExpanded(true,true);
+        mAppBarLayout.setExpanded(false,false);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.contenedor_base, FrMenuActMain.newInstance())
                 .commit();
-
+//SHITTT
         UserRegistro userRegistro = MyApp.getWritableDatabase().getUserRegistro();
 
         L.t(this, "Nick: "+userRegistro.getNick_name()+
@@ -138,8 +140,8 @@ public class ActivityMain extends AppCompatActivity
                 UserRegistro userRegistro=MyApp.getWritableDatabase().getUserRegistro();
 
                 if(!userRegistro.getNick_name().equals("noAsig")){
-                     Intent myIntent = new Intent(ActivityMain.this, ActivityUser.class);
-                     startActivity(myIntent);
+                    DialogPassUserProfile dialogPassUserProfile= new DialogPassUserProfile();
+                    dialogPassUserProfile.show(getSupportFragmentManager(),"Log In");
                 }else {
                     DialogRegiToClan dialogRegiToClan = new DialogRegiToClan();
                     dialogRegiToClan.show(getSupportFragmentManager(), "Regi");
@@ -205,12 +207,18 @@ public class ActivityMain extends AppCompatActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrViewPagerWikia.newInstance())
                     .commit();
+        }else if(where.equals("notify")) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrNotifyActMain.newInstance())
+                    .commit();
         }else if(where.equals("web")){
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrWebViewActMain.newInstance())
                     .commit();
         }
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -257,6 +265,7 @@ public class ActivityMain extends AppCompatActivity
             mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
             fragmentChanger("menu");
         } else if (id == R.id.navigation_item_2) {
+            stateBackPress=1000;
             mAppBarLayout.setExpanded(false, true);
             mCollapsingToolbarLayout.setTitle("Fan Page Fiends");
             fragmentChanger("web");
@@ -295,6 +304,14 @@ public class ActivityMain extends AppCompatActivity
             stateBackPress=1000;
             fragmentChanger("wikia");
         }
+        if(position==5){
+
+            mAppBarLayout.setExpanded(false,true);
+            mCollapsingToolbarLayout.setTitle("Notificaciones");
+
+            stateBackPress=1000;
+            fragmentChanger("notify");
+        }
     }
 
     @Override
@@ -311,16 +328,33 @@ public class ActivityMain extends AppCompatActivity
     }
 
     @Override
-    public void onMsjToClanDialogSet(String codigo,String msj, String donde) {
-        L.t(this,"Cod: "+codigo);
-        L.t(this,"MSJ: "+msj);
-        L.t(this,"Spinner: "+donde);
+    public void onLogInDialogSet(String codigo) {
+
+        sendCheckCodeBackend(this,codigo);
+
+
+    }
+
+    @Override
+    public void onMsjToClanDialogSet(String codigo,String msj, String donde,String urlNoti,String urlVid) {
+      /*  L.t(this,"Cod:     "+codigo+
+                "\nMSJ:     "+msj+
+                "\nSpinner: "+donde+
+                "\nUrNt:    "+urlNoti+
+                "\nUrVi:    "+urlVid);*/
+
         UserRegistro userRegistro=MyApp.getWritableDatabase().getUserRegistro();
         if(userRegistro.getAdmin().equals("1")){
 
             sendMsjForDeviceToBackend(this, userRegistro.getNick_name(),
-                    codigo, donde, "msj",  msj);
+                    codigo, donde, "msj",  msj,urlNoti,urlVid);
         }
+    }
+
+    private void changeActivity(String CODIGO){
+        Intent myIntent = new Intent(ActivityMain.this, ActivityUser.class);
+        myIntent.putExtra("CODIGO",CODIGO);
+        startActivity(myIntent);
     }
 
 
@@ -360,9 +394,11 @@ public class ActivityMain extends AppCompatActivity
                     if(estado.equals("1")&& tipo.equals("admin")){
                         MyApp.getWritableDatabase().updateUserRegistroToAdmin(nickName,"1","1");
                         L.t(context,"Jugador admin clan activo");
+                        changeActivity(codigo);
                     }else if(estado.equals("1")&& tipo.equals("jugador")){
                         MyApp.getWritableDatabase().updateUserRegistroToAdmin(nickName,"1","0");
                         L.t(context,"Jugador activo");
+                        changeActivity(codigo);
                     }
 
                     if(estado.equals("2")){
@@ -437,9 +473,117 @@ public class ActivityMain extends AppCompatActivity
         requestQueue.add(request);
     }
 
+    private void sendCheckCodeBackend(
+            final Context context  ,final String codigo  ) {
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
+        String url = "http://ebfiends.esy.es/public/registro_al_clan";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("checkCode", "1");
+        map.put("codigo",codigo);
+
+
+        JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
+                url,new JSONObject(map), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
+                try{
+                    String estado="NA",MSJ="NA";
+                    if(response.has(Key.Answer.ESTADO)&&
+                            !response.isNull(Key.Answer.ESTADO)){
+                        estado = response.getString(Key.Answer.ESTADO);
+                    }
+                    if(response.has(Key.Answer.MSJ)&&
+                            !response.isNull(Key.Answer.MSJ)){
+                        MSJ = response.getString(Key.Answer.MSJ);
+                    }
+
+                    if(estado.equals("1")){
+
+                        L.t(context,MSJ);
+                        changeActivity(codigo);
+                    }
+
+                    if(estado.equals("2")){
+                        L.t(context,MSJ);
+                    }
+
+
+
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    error.printStackTrace();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        L.t(context, getResources().getString(R.string.volley_error_time));
+
+                    } else if (error instanceof AuthFailureError) {
+                        L.t(context, getResources().getString(R.string.volley_error_aut));
+
+                    } else if (error instanceof ServerError) {
+                        L.t(context, getResources().getString(R.string.volley_error_serv));
+
+                    } else if (error instanceof NetworkError) {
+                        L.t(context, getResources().getString(R.string.volley_error_net));
+
+                    } else if (error instanceof ParseError) {
+                        L.t(context, getResources().getString(R.string.volley_error_par));
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            sendCheckCodeBackend(context,   codigo);
+                        }
+                    });
+                    alertDialog.show();
+
+                }else
+                {
+                    sendCheckCodeBackend(context,   codigo);
+                }
+            }
+        });
+        requestQueue.add(request);
+    }
+
     private void sendMsjForDeviceToBackend(
             final Context context, final String admin,final String codigo,final String donde,
-            final String tipo, final String msj ) {
+            final String tipo, final String msj,final String urlNoti,final String urlVid ) {
         progressDialog.setMessage("Cargando ...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -455,6 +599,8 @@ public class ActivityMain extends AppCompatActivity
         map.put("msj",msj);
         map.put("admin",admin);
         map.put("tipo",tipo);
+        map.put("url_noti",urlNoti);
+        map.put("url_vid",urlVid);
 
 
         JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
@@ -533,14 +679,14 @@ public class ActivityMain extends AppCompatActivity
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            sendMsjForDeviceToBackend(context, admin, codigo, donde, tipo,  msj);
+                            sendMsjForDeviceToBackend(context, admin, codigo, donde, tipo,  msj,urlNoti,urlVid);
                         }
                     });
                     alertDialog.show();
 
                 }else
                 {
-                    sendMsjForDeviceToBackend(context, admin, codigo, donde, tipo,  msj);
+                    sendMsjForDeviceToBackend(context, admin, codigo, donde, tipo,  msj,urlNoti,urlVid);
                 }
             }
         });

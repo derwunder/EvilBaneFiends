@@ -7,6 +7,7 @@ public class WikiPersonaje {
 
   private String clase,vida,atq,def,agi;
   private String detalle,img_pic,img_view;
+    private String video_view;
 
     public WikiPersonaje(){}
 
@@ -72,5 +73,13 @@ public class WikiPersonaje {
 
     public String getImg_view(){
         return img_view;
+    }
+
+    public void setVideo_view(String video_view) {
+        this.video_view = video_view;
+    }
+
+    public String getVideo_view(){
+        return video_view;
     }
 }

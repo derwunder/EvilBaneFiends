@@ -2,12 +2,16 @@ package com.wos.dernv.evilbanefiends.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -84,11 +88,14 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
 
             holder.pjDetalle.setVisibility(View.GONE);
             holder.pjImageFull.setVisibility(View.GONE);
+            holder.lcontentWVPj.setVisibility(View.GONE);
             holder.showHideButton.setColorFilter(ContextCompat.getColor(context,R.color.colorPrimaryDark));
         }else {
             holder.pjDetalle.setVisibility(View.VISIBLE);
             holder.pjImageFull.setVisibility(View.VISIBLE);
+            holder.lcontentWVPj.setVisibility(View.VISIBLE);
 
+            holder.webViewPjl.loadUrl("http://www.youtube.com/embed/" +wikiPersonaje.getVideo_view()+ "?autoplay=1&vq=small");
             holder.pjDetalle.setText(wikiPersonaje.getDetalle());
             loadImages(wikiPersonaje.getImg_view(),holder,"imgFull");
             holder.showHideButton.setColorFilter(ContextCompat.getColor(context,R.color.colorWhite));
@@ -127,6 +134,8 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
         ImageView pjImage,pjImageFull;
         ImageView showHideButton;
         TextView pjNombre,pjVida,pjAtq,pjDef,pjAgi,pjDetalle;
+        WebView webViewPjl;
+        LinearLayout lcontentWVPj;
 
         public RcWikiPersonajeViewHolder(View itemView) {
             super(itemView);
@@ -142,6 +151,40 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
             pjDef=(TextView)itemView.findViewById(R.id.pjDefensa);
             pjAgi=(TextView)itemView.findViewById(R.id.pjAgilidad);
             pjDetalle=(TextView)itemView.findViewById(R.id.pjDetalle);
+
+            lcontentWVPj=(LinearLayout)itemView.findViewById(R.id.contenedorWebViewPj);
+            webViewPjl=(WebView)itemView.findViewById(R.id.webViewPj);
+
+            webViewPjl.getSettings().setDomStorageEnabled(true);
+            webViewPjl.getSettings().setJavaScriptEnabled(true);
+            webViewPjl.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+            webViewPjl.getSettings().setSupportMultipleWindows(true);
+            webViewPjl.getSettings().setSupportZoom(true);
+            webViewPjl.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    //progressDialog.dismiss();
+                }
+
+                @Override
+                public void onPageStarted(WebView view, String url,Bitmap favicon) {
+                    //
+                    super.onPageStarted(view, url, favicon);
+               /*- progressDialog.setMessage("Cargando ...");
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();-*/
+                }
+            });
+
+
 
 
             relativeLayout.setOnClickListener(this);

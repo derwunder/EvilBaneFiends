@@ -49,6 +49,7 @@ public interface Key {
         String WIKI_PERSONAJE="wikiPersonaje";
         String CLASE="clase",VIDA="vida",ATQ="atq",DEF="def",AGI="agi";
         String DETALLE="detalle",IMG_PIC="img_pic",IMG_VIEW="img_view";
+        String VIDEO_VIEW="video_view";
     }
     interface JsGetWikiHab{
         String WIKI_HABILIDAD="wikiHabilidad";

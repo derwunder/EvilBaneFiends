@@ -48,9 +48,9 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
 
     private LayoutInflater inflater;
     private ArrayList<Player> listPlayer = new ArrayList<>();
+    private ArrayList<WikiEquipo> listWikiEquipo;
 
     private MyVolleySingleton myVolleySingleton;
-    private RequestQueue requestQueue;
     private ImageLoader imageLoader;
     private ProgressDialog progressDialog ;private int persistenTry=0;
 
@@ -62,7 +62,6 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
     public AdapterRcPlayer(Context context, ClickCallBack clickCallBack){
         inflater=LayoutInflater.from(context);
         myVolleySingleton = MyVolleySingleton.getsInstance();
-        requestQueue=myVolleySingleton.getmRequestQueue();
         imageLoader = myVolleySingleton.getmImageLoader();
         this.context=context;
         this.clickCallBack=clickCallBack;
@@ -73,7 +72,11 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
         for (int i=0;i<listPlayer.size();i++){
             listVisorDetalle.add(false);
         }
-        notifyItemChanged(0,listPlayer.size());
+        notifyDataSetChanged();
+    }
+    public void setWikiEquipoList(ArrayList<WikiEquipo> listWikiEquipo){
+        this.listWikiEquipo=listWikiEquipo;
+
     }
     @Override
     public RcPlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -87,7 +90,14 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
         Player actPlayer= listPlayer.get(position);
         visorDetalle=listVisorDetalle.get(position);
 
-        enviarPeticionJson(actPlayer.getCasco(),holder,"pic");
+
+        for(int i=0;i<listWikiEquipo.size();i++){
+            if(listWikiEquipo.get(i).getCodeName().equals(actPlayer.getCasco())){
+                String urlImagePrev= listWikiEquipo.get(i).getImg_ic00();
+                loadImages(urlImagePrev,holder,"pic");
+                i=listWikiEquipo.size();
+            }
+        }
 
 
         holder.playerNickName.setText(actPlayer.getNick_name());
@@ -158,195 +168,13 @@ public class AdapterRcPlayer extends RecyclerView.Adapter<AdapterRcPlayer.RcPlay
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    loadImages("http://ebfiends.esy.es/public/Misc/Jugador/espera_pj.jpg",holder,tipo);
                 }
             });
         }
     }
 
 
-
-    private  WikiEquipo wikiEquipo = new WikiEquipo();
-    ///Llamados pic Pj////
-    public void enviarPeticionJson(final String codeName, final RcPlayerViewHolder holder, final String tipo){
-
-        progressDialog.setMessage("Cargando ...");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET,
-                UrlEP.EBFIENDS_W_EQ+Key.EndPoint.Wk_codeName+codeName
-                , null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        wikiEquipo=parseJsonResponse(response,codeName);
-                        loadImages(wikiEquipo.getImg_ic00(),holder,tipo);
-                        // MiAplicativo.getWritableDatabase().insertMateriaPensumIndividual(listMateria, ma_modulo, true);//IMPORTANTE
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-
-                progressDialog.dismiss();
-                persistenTry++;
-                String auxError="";
-
-                if(persistenTry>=5) {
-                    persistenTry = 0;
-
-                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
-
-                        auxError = "Fuera de tiempo"; // getString(R.string.error_timeOut);
-                    } else if (error instanceof AuthFailureError) {
-
-                        auxError = "Fallo en ruta"; // getString(R.string.error_AuthFail);
-                    } else if (error instanceof ServerError) {
-
-                        auxError = "Error en la nube";//getString(R.string.error_Server);
-                    } else if (error instanceof NetworkError) {
-
-                        auxError = "Error de Red";//getString(R.string.error_NetWork);
-                    } else if (error instanceof ParseError) {
-
-                        auxError = "Error de conexion";//getString(R.string.error_NetWork);
-                    }
-
-                    //  textViewVolleyError.setVisibility(View.VISIBLE);
-                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
-                    alertDialog.setTitle("Error en la Nube");
-                    alertDialog.setMessage("Error: " + auxError + "\n\n"
-                            + "Reintentar Conexion?");
-                    alertDialog.setCancelable(false);
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            enviarPeticionJson(codeName,holder,tipo);
-                        }
-                    });
-                    alertDialog.show();
-                }else
-                    enviarPeticionJson(codeName,holder,tipo);
-
-
-            }
-        });
-
-        //sin esta linea no se puede hacer la peticion al server
-        requestQueue.add(request);
-    }
-    public WikiEquipo parseJsonResponse(JSONObject response,String codeName){
-        WikiEquipo wikiEquipo = new WikiEquipo();
-
-        //  if(response.has(Key.EndPointMateria.KEY_ESTADO)&&
-        //        !response.isNull(Key.EndPointMateria.KEY_ESTADO))
-
-        if(response==null || response.length()>0){
-            try{
-                progressDialog.dismiss();
-                persistenTry=0;
-
-
-                String CODENAME="NA" ;
-                String NAME="NA" ;
-                String CLASE="NA";
-                String HB1="NA",HB2="NA",HB3="NA",HB4="NA",HB5="NA",HB6="NA" ;
-                String IMG_IC00="NA",IMG_IC01="NA",IMG_IC02="NA",
-                        IMG_IC03="NA",IMG_IC04="NA",IMG_IC05="NA";
-                String IMG_VIEW="NA";
-
-                JSONObject currentWikiEQ= response.getJSONObject(Key.JsGetWikiEquipo.WIKI_EQUIPO);
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.CODENAME)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.CODENAME)){
-                    CODENAME=currentWikiEQ.getString(Key.JsGetWikiEquipo.CODENAME);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.NAME)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.NAME)){
-                    NAME=currentWikiEQ.getString(Key.JsGetWikiEquipo.NAME);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.CLASE)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.CLASE)){
-                    CLASE=currentWikiEQ.getString(Key.JsGetWikiEquipo.CLASE);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.HB1)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.HB1)){
-                    HB1=currentWikiEQ.getString(Key.JsGetWikiEquipo.HB1);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.HB2)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.HB2)){
-                    HB2=currentWikiEQ.getString(Key.JsGetWikiEquipo.HB2);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.HB3)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.HB3)){
-                    HB3=currentWikiEQ.getString(Key.JsGetWikiEquipo.HB3);
-                }
-
-
-
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC00)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC00)){
-                    IMG_IC00=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC00);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC01)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC01)){
-                    IMG_IC01=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC01);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC02)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC02)){
-                    IMG_IC02=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC02);
-                }
-
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC03)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC03)){
-                    IMG_IC03=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC03);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC04)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC04)){
-                    IMG_IC04=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC04);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_IC05)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_IC05)){
-                    IMG_IC05=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_IC05);
-                }
-                if(currentWikiEQ.has(Key.JsGetWikiEquipo.IMG_VIEW)&&
-                        !currentWikiEQ.isNull(Key.JsGetWikiEquipo.IMG_VIEW)){
-                    IMG_VIEW=currentWikiEQ.getString(Key.JsGetWikiEquipo.IMG_VIEW);
-                }
-
-                wikiEquipo.setCodeName(CODENAME);
-                wikiEquipo.setName(NAME);
-                wikiEquipo.setClase(CLASE);
-
-                wikiEquipo.setHb1(HB1);wikiEquipo.setHb2(HB2);wikiEquipo.setHb3(HB3);
-                wikiEquipo.setHb4(HB4);wikiEquipo.setHb5(HB5);wikiEquipo.setHb6(HB6);
-
-                wikiEquipo.setImg_ic00(IMG_IC00);wikiEquipo.setImg_ic01(IMG_IC01);wikiEquipo.setImg_ic02(IMG_IC02);
-                wikiEquipo.setImg_ic03(IMG_IC03);wikiEquipo.setImg_ic04(IMG_IC04);wikiEquipo.setImg_ic05(IMG_IC05);
-
-                wikiEquipo.setImg_view(IMG_VIEW);
-
-
-
-            }catch (JSONException e){
-                e.printStackTrace();
-            }
-        }
-
-
-        return wikiEquipo;
-    }
 
 
 

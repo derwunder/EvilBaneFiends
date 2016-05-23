@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.logs.L;
@@ -34,11 +36,11 @@ public class DialogMsjToNotify extends DialogFragment {
     private ClickCallBack clickCallBack;
     private LayoutInflater inflater;
     private TextView textMensaje, textCodigo;
-    private EditText editTextMensaje, editTextCodigo;
-    private ImageView imgClan;
+    private EditText editTextMensaje, editTextCodigo,editTextLinkNoti,editTextLinkYoutube;
+    private ImageView imgClan, imgYESnoti, imgYESvid;
     private Spinner spinnerDonde;
     private ArrayList<String> selectorSpinner;
-    private int positionSpinnerDonde;
+    private int positionSpinnerDonde,urlNotiActivo, urlVidActivo;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -54,6 +56,63 @@ public class DialogMsjToNotify extends DialogFragment {
         editTextCodigo=(EditText)view.findViewById(R.id.editTextCodigo);
         spinnerDonde=(Spinner)view.findViewById(R.id.spinnerDonde);
         positionSpinnerDonde=0;
+        urlNotiActivo=0;
+        urlVidActivo=0;
+
+        imgYESnoti=(ImageView)view.findViewById(R.id.imgYESnoti);
+        imgYESvid=(ImageView)view.findViewById(R.id.imgYESvid);
+        editTextLinkNoti=(EditText)view.findViewById(R.id.editTextUNoti);
+        editTextLinkYoutube=(EditText)view.findViewById(R.id.editTextUVid);
+
+        imgYESnoti.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+        imgYESvid.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+        editTextLinkNoti.setVisibility(View.INVISIBLE);
+        editTextLinkYoutube.setVisibility(View.INVISIBLE);
+
+        YoYo.with(Techniques.Shake)
+                .duration(900)
+                .playOn(view.findViewById(R.id.imgYESnoti));
+        YoYo.with(Techniques.Shake)
+                .delay(100)
+                .duration(900)
+                .playOn(view.findViewById(R.id.imgYESvid));
+
+
+        imgYESnoti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(urlNotiActivo==0){
+                    urlNotiActivo=1;
+                    editTextLinkNoti.setVisibility(View.VISIBLE);
+                    editTextLinkNoti.setTextColor(ContextCompat.getColor(getContext(),R.color.colorWhite));
+                    imgYESnoti.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorWhite));
+                }
+                else if(urlNotiActivo==1){
+                    urlNotiActivo=0;
+                    editTextLinkNoti.setVisibility(View.INVISIBLE);
+                    editTextLinkNoti.setTextColor(ContextCompat.getColor(getContext(),R.color.colorBgGris));
+                    imgYESnoti.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+                }
+            }
+        });
+        imgYESvid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(urlVidActivo==0){
+                    urlVidActivo=1;
+                    editTextLinkYoutube.setVisibility(View.VISIBLE);
+                    editTextLinkYoutube.setTextColor(ContextCompat.getColor(getContext(),R.color.colorWhite));
+                    imgYESvid.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+                }
+                else if(urlVidActivo==1){
+                    urlVidActivo=0;
+                    editTextLinkYoutube.setVisibility(View.INVISIBLE);
+                    editTextLinkYoutube.setTextColor(ContextCompat.getColor(getContext(),R.color.colorBgGris));
+                    imgYESvid.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorPrimaryDark));
+                }
+            }
+        });
+
 
       //  editTextMensaje.setFilters(new InputFilter[] { new InputFilter.LengthFilter(30) });
         editTextCodigo.setFilters(new InputFilter[] { new InputFilter.LengthFilter(30) });
@@ -93,11 +152,14 @@ public class DialogMsjToNotify extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        String auxDonde="";
+                        String auxDonde="";String auxUrlNoti="noAsig", auxUrlVid="noAsig";
                         if(positionSpinnerDonde==0){auxDonde="msjToClan";}
                         else if(positionSpinnerDonde==1){auxDonde="msjToAll";}
+                        if(urlNotiActivo==1){auxUrlNoti=editTextLinkNoti.getText().toString();}
+                        if(urlVidActivo==1){auxUrlVid=editTextLinkYoutube.getText().toString();}
+
                         clickCallBack.onMsjToClanDialogSet(editTextCodigo.getText().toString(),
-                                editTextMensaje.getText().toString(),auxDonde);
+                                editTextMensaje.getText().toString(),auxDonde,auxUrlNoti,auxUrlVid);
                     }
                 })
                 .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {

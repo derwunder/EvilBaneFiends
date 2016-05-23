@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import com.wos.dernv.evilbanefiends.logs.L;
+import com.wos.dernv.evilbanefiends.objects.NotifyItem;
 import com.wos.dernv.evilbanefiends.objects.UserRegistro;
 
 import java.util.ArrayList;
@@ -26,19 +27,20 @@ public class DBFiend {
     }
 
 
-  /**  Notification Functions
-   *
+
     public void insertNotiItem(NotifyItem notifyItem){
 
-        String sql = "INSERT INTO " + PensumHelper.TABLE_NOTIFY + " VALUES (?,?,?,?);";
+        String sql = "INSERT INTO " + FiendHelper.TABLE_NOTIFY + " VALUES (?,?,?,?,?,?);";
         //compile the statement and start a transaction
         SQLiteStatement statement = mDatabase.compileStatement(sql);
         mDatabase.beginTransaction();
         statement.clearBindings();
         //for a given column index, simply bind the data to be put inside that index
-        statement.bindString(2, notifyItem.getClase());
-        statement.bindString(3, notifyItem.getMsj());
-        statement.bindString(4, notifyItem.getMod());
+        statement.bindString(2, notifyItem.getTipo());
+        statement.bindString(3, notifyItem.getAdmin_send());
+        statement.bindString(4, notifyItem.getMensaje());
+        statement.bindString(5, notifyItem.getUrl_noti());
+        statement.bindString(6, notifyItem.getUrl_vid());
         statement.execute();
 
         //set the transaction as successful and end the transaction
@@ -49,13 +51,16 @@ public class DBFiend {
     public ArrayList<NotifyItem> getAllNotiItem(){
         ArrayList<NotifyItem> listUserNoti = new ArrayList<>();
 
-        String[] columns = {PensumHelper.COLUMN_NT_UID,
-                PensumHelper.COLUMN_NT_CLASS,
-                PensumHelper.COLUMN_NT_MSJ,
-                PensumHelper.COLUMN_NT_MOD
+        String[] columns = {FiendHelper.COLUMN_NT_UID,
+                FiendHelper.COLUMN_NT_TIPO,
+                FiendHelper.COLUMN_NT_ADMIN_SEND,
+                FiendHelper.COLUMN_NT_MSJ,
+                FiendHelper.COLUMN_NT_URL_NOTI,
+                FiendHelper.COLUMN_NT_URL_VID
+
         };
-        Cursor cursor = mDatabase.query(PensumHelper.TABLE_NOTIFY, columns, null, null, null, null,
-                PensumHelper.COLUMN_NT_UID+" DESC");
+        Cursor cursor = mDatabase.query(FiendHelper.TABLE_NOTIFY, columns, null, null, null, null,
+                FiendHelper.COLUMN_NT_UID+" DESC");
 
         if (cursor != null && cursor.moveToFirst()) {
             L.m("loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
@@ -65,10 +70,13 @@ public class DBFiend {
                 NotifyItem notifyItem = new NotifyItem();
                 //each step is a 2 part process, find the index of the column first, find the data of that column using
                 //that index and finally set our blank materia object to contain our data
-                notifyItem.setId(cursor.getInt(cursor.getColumnIndex(PensumHelper.COLUMN_NT_UID)));
-                notifyItem.setClase(cursor.getString(cursor.getColumnIndex(PensumHelper.COLUMN_NT_CLASS)));
-                notifyItem.setMsj(cursor.getString(cursor.getColumnIndex(PensumHelper.COLUMN_NT_MSJ)));
-                notifyItem.setMod(cursor.getString(cursor.getColumnIndex(PensumHelper.COLUMN_NT_MOD)));
+                notifyItem.setId(cursor.getInt(cursor.getColumnIndex(FiendHelper.COLUMN_NT_UID)));
+                notifyItem.setTipo(cursor.getString(cursor.getColumnIndex(FiendHelper.COLUMN_NT_TIPO)));
+                notifyItem.setAdmin_send(cursor.getString(cursor.getColumnIndex(FiendHelper.COLUMN_NT_ADMIN_SEND)));
+
+                notifyItem.setMensaje(cursor.getString(cursor.getColumnIndex(FiendHelper.COLUMN_NT_MSJ)));
+                notifyItem.setUrl_noti(cursor.getString(cursor.getColumnIndex(FiendHelper.COLUMN_NT_URL_NOTI)));
+                notifyItem.setUrl_vid(cursor.getString(cursor.getColumnIndex(FiendHelper.COLUMN_NT_URL_VID)));
 
 
                 //add the materia to the list of materia objects which we plan to return
@@ -79,8 +87,8 @@ public class DBFiend {
         return listUserNoti;
     }
     public void deleteNotiItem(int id){
-        String sql = "DELETE FROM " + PensumHelper.TABLE_NOTIFY +
-                " WHERE "+PensumHelper.COLUMN_NT_UID+" = ?;" ;
+        String sql = "DELETE FROM " + FiendHelper.TABLE_NOTIFY +
+                " WHERE "+FiendHelper.COLUMN_NT_UID+" = ?;" ;
 
         //compile the statement and start a transaction
         SQLiteStatement statement = mDatabase.compileStatement(sql);
@@ -95,7 +103,7 @@ public class DBFiend {
         mDatabase.endTransaction();
     }
     public void deleteAllNotiItem(){
-        String sql = "DELETE FROM " + PensumHelper.TABLE_NOTIFY +
+        String sql = "DELETE FROM " + FiendHelper.TABLE_NOTIFY +
                 " ;" ;
 
         //compile the statement and start a transaction
@@ -106,7 +114,7 @@ public class DBFiend {
         //set the transaction as successful and end the transaction
         mDatabase.setTransactionSuccessful();
         mDatabase.endTransaction();
-    } */
+    }
 
     public void updateUserRegistroGCM(String dv_regi){
         String sql = "UPDATE " + FiendHelper.TABLE_USER_REGISTRO + " SET " +
@@ -237,17 +245,22 @@ public class DBFiend {
          * ////////// TABLA DE NOTIFICACIONES ////////////////////////////////////////
          ***********************************************************************/
         public static final String TABLE_NOTIFY = "notify";
-        public static final String COLUMN_NT_UID = "nt_uid";
-        public static final String COLUMN_NT_CLASS = "nt_class";
-        public static final String COLUMN_NT_MSJ = "nt_msj";
-        public static final String COLUMN_NT_MOD = "nt_mod";
+
+        public static final String COLUMN_NT_UID = "id";
+        public static final String COLUMN_NT_TIPO = "tipo";
+        public static final String COLUMN_NT_ADMIN_SEND = "admin_send";
+        public static final String COLUMN_NT_MSJ = "mensaje";
+        public static final String COLUMN_NT_URL_NOTI = "url_noti";
+        public static final String COLUMN_NT_URL_VID = "url_vid";
 
 
         private static final String CREATE_TABLE_NOTIFY = "CREATE TABLE " + TABLE_NOTIFY + " (" +
                 COLUMN_NT_UID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                COLUMN_NT_CLASS +" TEXT ," +
-                COLUMN_NT_MSJ +  " TEXT,  " +
-                COLUMN_NT_MOD+   " TEXT "+
+                COLUMN_NT_TIPO +" TEXT ," +
+                COLUMN_NT_ADMIN_SEND +  " TEXT,  " +
+                COLUMN_NT_MSJ+   " TEXT, "+
+                COLUMN_NT_URL_NOTI+   " TEXT, "+
+                COLUMN_NT_URL_VID+   " TEXT "+
 
                 ");";
 

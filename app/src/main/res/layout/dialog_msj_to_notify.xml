@@ -35,7 +35,7 @@
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content">
 
                     <TextView
@@ -48,8 +48,7 @@
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:maxWidth="150dp"
-                        android:minWidth="120dp"
+                        android:minWidth="90dp"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
                         android:text="codigo"
@@ -66,10 +65,11 @@
 
                 </LinearLayout>
 
+
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content">
                     <ImageView
                         android:layout_width="wrap_content"
@@ -96,6 +96,52 @@
                 android:selectAllOnFocus="true"
                 android:id="@+id/editTextMensaje"
                 android:text="Listo para poner al dia al clan" />
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textWebEditText"
+                    android:selectAllOnFocus="true"
+                    android:id="@+id/editTextUNoti"
+                    android:text="Link noticia web" />
+
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_web_white_36dp"
+                    android:id="@+id/imgYESnoti" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:weightSum="2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textWebEditText"
+                    android:selectAllOnFocus="true"
+                    android:id="@+id/editTextUVid"
+                    android:text="ID - Video Youtube" />
+
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_youtube_play_white_36dp"
+                    android:id="@+id/imgYESvid" />
+
+            </LinearLayout>
 
 
         </LinearLayout>

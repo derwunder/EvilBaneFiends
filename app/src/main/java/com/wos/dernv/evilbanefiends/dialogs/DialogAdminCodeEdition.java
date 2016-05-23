@@ -1,5 +1,6 @@
 package com.wos.dernv.evilbanefiends.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -116,4 +117,5 @@ public class DialogAdminCodeEdition extends DialogFragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
 }

@@ -14,6 +14,9 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.acts.ActivityMain;
+import com.wos.dernv.evilbanefiends.logs.L;
+import com.wos.dernv.evilbanefiends.myapp.MyApp;
+import com.wos.dernv.evilbanefiends.objects.NotifyItem;
 
 /**
  * Created by der_w on 5/14/2016.
@@ -51,11 +54,11 @@ public class GcmIntentService extends IntentService{
             if(GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)){
 
-                sendNotification("Send error: " + extras.toString(),"Error","base");
+                sendNotification("Send error: " + extras.toString(),"Error","base","noAsig","noAsig");
             }else if(GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)){
                 sendNotification("Deleted messages on server: " +
-                        extras.toString(),"Error","base");
+                        extras.toString(),"Error","base","noAsig","noAsig");
             }else if(GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
 
@@ -70,7 +73,8 @@ public class GcmIntentService extends IntentService{
 
                 //   Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
-                sendNotification(extras.getString("Msj"), extras.getString("Admin"), extras.getString("Tipo"));
+                sendNotification(extras.getString("Msj"), extras.getString("Admin"), extras.getString("Tipo"),
+                        extras.getString("Url_noti"),extras.getString("Url_vid"));
                 //    Log.i(TAG, "Received: " + extras.toString());
             }
         }
@@ -79,7 +83,7 @@ public class GcmIntentService extends IntentService{
     }
 
 
-    private void sendNotification(String msg,String admin, String tipo){
+    private void sendNotification(String msg,String admin, String tipo,String url_noti, String url_vid){
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -89,7 +93,7 @@ public class GcmIntentService extends IntentService{
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         //. setSmallIcon(R.drawable.ic)
-                        .setContentTitle(admin+": "+tipo)
+                        .setContentTitle(admin)
                         .setAutoCancel(true)
                         // .setSmallIcon(R.mipmap.ic_launcher)
                         .setStyle(new NotificationCompat.BigTextStyle())
@@ -97,8 +101,19 @@ public class GcmIntentService extends IntentService{
                         .setVibrate(new long[]{1000, 1000, 1000, 1000, 1000})
                         .setLights(Color.BLUE, 3000, 3000);
 
-        if(tipo.equals("msj"))
+        if(tipo.equals("msj")) {
             mBuilder.setSmallIcon(R.drawable.ic_fiend_00);
+
+            NotifyItem notifyItem= new NotifyItem();
+            notifyItem.setTipo(tipo);
+            notifyItem.setAdmin_send(admin);
+            notifyItem.setMensaje(msg);
+            notifyItem.setUrl_noti(url_noti);
+            notifyItem.setUrl_vid(url_vid);
+            L.t(MyApp.getAppContext(),"admin: "+notifyItem.getAdmin_send()+
+            "\nMSJ: "+notifyItem.getMensaje());
+            MyApp.getWritableDatabase().insertNotiItem(notifyItem);
+        }
         else if(tipo.equals("batalla"))
             mBuilder.setSmallIcon(R.drawable.ic_fiend_00);
         else if(tipo.equals("jugador"))

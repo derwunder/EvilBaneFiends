@@ -7,4 +7,5 @@ public interface ClickCallBackAdmin {
     void onRcAdminCodeEdition(String id,String codigo, String nickName, String accion);
     void onDialogSetCodeEdition(String accion, String codigoAdmin, String codigoJugadorOld,
                                 String codigoJugadorNew, String idInCatCod);
+    void reCalFrProfile();
 }

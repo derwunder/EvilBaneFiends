@@ -201,7 +201,7 @@ public class FrWikiPersonaje extends Fragment {
 
 
                 String CLASE="NA",VIDA="NA",ATQ="NA",DEF="NA",AGI="NA";
-                String DETALLE="NA",IMG_PIC="NA",IMG_VIEW="NA";
+                String DETALLE="NA",IMG_PIC="NA",IMG_VIEW="NA",VIDEO_VIEW="NA";
 
                 JSONArray currentWikiPersonajes = response.getJSONArray(Key.JsGetWikiPersonaje.WIKI_PERSONAJE);
                 for(int i=0; i<currentWikiPersonajes.length();i++){
@@ -239,11 +239,16 @@ public class FrWikiPersonaje extends Fragment {
                             !currentWPJ.isNull(Key.JsGetWikiPersonaje.IMG_VIEW)){
                         IMG_VIEW=currentWPJ.getString(Key.JsGetWikiPersonaje.IMG_VIEW);
                     }
+                    if(currentWPJ.has(Key.JsGetWikiPersonaje.VIDEO_VIEW)&&
+                            !currentWPJ.isNull(Key.JsGetWikiPersonaje.VIDEO_VIEW)){
+                        VIDEO_VIEW=currentWPJ.getString(Key.JsGetWikiPersonaje.VIDEO_VIEW);
+                    }
 
                     WikiPersonaje wikiPj =new WikiPersonaje();
                     wikiPj.setClase(CLASE);
                     wikiPj.setVida(VIDA);wikiPj.setAtq(ATQ);wikiPj.setDef(DEF);wikiPj.setAgi(AGI);
                     wikiPj.setDetalle(DETALLE);wikiPj.setImg_pic(IMG_PIC);wikiPj.setImg_view(IMG_VIEW);
+                    wikiPj.setVideo_view(VIDEO_VIEW);
 
 
 

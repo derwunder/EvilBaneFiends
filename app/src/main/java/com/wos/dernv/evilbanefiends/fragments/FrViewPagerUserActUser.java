@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.adapters.AdapterViewPagerUser;
 import com.wos.dernv.evilbanefiends.adapters.AdapterViewPagerWikia;
+import com.wos.dernv.evilbanefiends.logs.L;
 
 /**
  * Created by der_w on 5/16/2016.
@@ -26,8 +27,11 @@ public class FrViewPagerUserActUser extends Fragment {
         // Required empty public constructor
     }
 
-    public static FrViewPagerUserActUser newInstance() {
+    public static FrViewPagerUserActUser newInstance(String CODIGO) {
         FrViewPagerUserActUser fragment = new FrViewPagerUserActUser();
+        Bundle args = new Bundle();
+        args.putString("CODIGO",CODIGO);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -49,6 +53,7 @@ public class FrViewPagerUserActUser extends Fragment {
         tabLayout = (TabLayout) rootView.findViewById(R.id.tab_layout);
 
         adapterViewPagerUser =new AdapterViewPagerUser(getChildFragmentManager());
+        adapterViewPagerUser.setCODIGO(getArguments().getString("CODIGO"));
         viewPager.setAdapter(adapterViewPagerUser);
 
         tabLayout.setupWithViewPager(viewPager);

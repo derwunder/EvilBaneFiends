@@ -40,9 +40,14 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.adapters.AdapterSpinnerClasePj;
 import com.wos.dernv.evilbanefiends.adapters.AdapterSpinnerWikiEq;
+import com.wos.dernv.evilbanefiends.dialogs.DialogPassUserProfile;
+import com.wos.dernv.evilbanefiends.events.ClickCallBackAdmin;
+import com.wos.dernv.evilbanefiends.events.ClickCallBackUserProfile;
 import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.myapp.MyApp;
 import com.wos.dernv.evilbanefiends.network.Key;
@@ -65,7 +70,7 @@ import java.util.Map;
 /**
  * Created by der_w on 5/17/2016.
  */
-public class FrUserProfileActUser extends Fragment{
+public class FrUserProfileActUser extends Fragment {
 
 
 
@@ -80,10 +85,14 @@ public class FrUserProfileActUser extends Fragment{
 
     private Player player;
 
+    //NickNAme layout vars
+    private ImageView NNimgEdit, NNimgSave, NNimgCancel;
+    private TextView textNickName;
+    private EditText editTextNickName;
+
     //Layout VARS
     private ImageView sdImgEdit, sdImgSave, sdImgCancel;
     private ImageView imgVida, imgAtq, imgDef, imgNivel, imgPais, imgEspecialidad;
-    private ImageView imgPerfil, imgInfo;
     private TextView textVida, textAtq, textDef, textNivel,textPais, textEspecialidad;
     private EditText editTextVida,  editTextAtq, editTextDef,  editTextNivel, editTextPais,  editTextEspecialidad;
 
@@ -99,6 +108,9 @@ public class FrUserProfileActUser extends Fragment{
     private RelativeLayout secEQ;
 
 
+    //VAR seccion de IMAGENES
+    private ImageView imgPerfil, imgInfo, saveImgPerfil,saveImgInfo;
+
 
     //Especial
     private ImageView cargarImgenGaleria;
@@ -112,13 +124,22 @@ public class FrUserProfileActUser extends Fragment{
     private ArrayList<WikiEquipo> listComun;
 
 
+    //registro
+    UserRegistro userRegistro;
+
+    //Instancia de Fragmento
+    FrUserProfileActUser frUserProfileActUser;
+    public void setInstanceOfFr(FrUserProfileActUser frUserProfileActUser){
+        this.frUserProfileActUser=frUserProfileActUser;
+    }
+
     public  FrUserProfileActUser(){}
 
-    public static FrUserProfileActUser newInstance(){
+    public static FrUserProfileActUser newInstance(String CODIGO){
         FrUserProfileActUser frUserProfileActUser= new FrUserProfileActUser();
-        /*Bundle args = new Bundle();
-        args.putInt(ARG_NUMERO_SECCION, num_seccion);
-        fragment.setArguments(args);*/
+        Bundle args = new Bundle();
+        args.putString("CODIGO",CODIGO);
+        frUserProfileActUser.setArguments(args);
         return frUserProfileActUser;
     }
 
@@ -149,40 +170,38 @@ public class FrUserProfileActUser extends Fragment{
         listComun=new ArrayList<>();
 
         spinnerWikiEqs=new ArrayList<>();
+        userRegistro=MyApp.getWritableDatabase().getUserRegistro();
     }
 
-
+    private String tipoIMGUPLOAD;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fr_profile_act_user,container,false);
 
-       setSeccionDatos(rootView);
+
+        setSeccionNickName(rootView,userRegistro);
+        setSeccionDatos(rootView);
         setSeccionEQ(rootView);
+        setSeccionImagenPerfilInfo(rootView);
 
 
 
-
+        showContentViewNickName();
         reduceContentSeccionDatos();
         reduceContentSeccionEQ();
 
 
         //setear lista por aca al adaptador
-        enviarPeticionJsonDatosUser("Azreel");   //Wicam Azreel
+        enviarPeticionJsonDatosUser(userRegistro.getNick_name());   //Wicam Azreel
 
 
 
-        cargarImgenGaleria.setOnClickListener(new View.OnClickListener() {
+       /* cargarImgenGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadImagefromGallery();
             }
-        });
-
-
-
-
-
-
+        });*/
 
 
 
@@ -191,8 +210,80 @@ public class FrUserProfileActUser extends Fragment{
         return rootView  ;// super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    private String clasePj="",helmetPj="",armorPj="",handPj="",bootPj="",weapPj="",
+    capPj="",accPj="";
 
-    public void setSeccionDatos(View rootView){
+    public void setSeccionImagenPerfilInfo(View rootView){
+        imgPerfil=(ImageView)rootView.findViewById(R.id.imgPerfil);
+        imgInfo=(ImageView)rootView.findViewById(R.id.imgInfo);
+
+        saveImgPerfil=(ImageView)rootView.findViewById(R.id.saveImgPerfil);
+        saveImgInfo=(ImageView)rootView.findViewById(R.id.saveImgInfo);
+        saveImgPerfil.setVisibility(View.GONE);
+        saveImgInfo.setVisibility(View.GONE);
+
+        imgPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadImagefromGallery(RESULT_LOAD_IMG_PERFIL);
+                imgPerfil.setClickable(false);
+            }
+        });
+        imgInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadImagefromGallery(RESULT_LOAD_IMG_INFO);
+                imgInfo.setClickable(false);
+            }
+        });
+
+        saveImgPerfil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                encodeImg();
+                tipoIMGUPLOAD="img_perfil";
+                // sendImageToBackend(getContext(),encodeImageString,"img_perfil");
+            }
+        });
+        saveImgInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                encodeImg();tipoIMGUPLOAD="img_info";
+                // sendImageToBackend(getContext(),encodeImageString,"img_info");
+            }
+        });
+    }
+    public void setSeccionNickName(View rootView, final UserRegistro userRegistro){
+        NNimgEdit=(ImageView)rootView.findViewById(R.id.NNimgEdit);
+        NNimgSave=(ImageView)rootView.findViewById(R.id.NNimgSave);
+        NNimgCancel=(ImageView)rootView.findViewById(R.id.NNimgCancel);
+
+        textNickName=(TextView)rootView.findViewById(R.id.textNickName);
+        editTextNickName=(EditText)rootView.findViewById(R.id.editTextNickName);
+
+        textNickName.setText(userRegistro.getNick_name());
+        editTextNickName.setText(userRegistro.getNick_name());
+        NNimgEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContentEditionNickName();
+            }
+        });
+        NNimgSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContentViewNickName();
+                sendNickNameToBackend(getContext(),editTextNickName.getText().toString(),userRegistro.getNick_name());
+            }
+        });
+        NNimgCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showContentViewNickName();
+            }
+        });
+    }
+    public void setSeccionDatos(final View rootView){
         cargarImgenGaleria=(ImageView)rootView.findViewById(R.id.loadImg);
 
         sdImgExpand=(ImageView)rootView.findViewById(R.id.sdImgExpand);
@@ -209,8 +300,7 @@ public class FrUserProfileActUser extends Fragment{
         imgNivel=(ImageView)rootView.findViewById(R.id.imgNivel);
         imgPais=(ImageView)rootView.findViewById(R.id.imgPais);
         imgEspecialidad=(ImageView)rootView.findViewById(R.id.imgEspecialidad);
-        imgPerfil=(ImageView)rootView.findViewById(R.id.imgPerfil);
-        imgInfo=(ImageView)rootView.findViewById(R.id.imgInfo);
+
 
         textVida=(TextView)rootView.findViewById(R.id.textVidaValue);
         textAtq=(TextView)rootView.findViewById(R.id.textAtqValue);
@@ -230,7 +320,7 @@ public class FrUserProfileActUser extends Fragment{
         sdImgExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expandContentSeccionDatos();
+                expandContentSeccionDatos(rootView);
             }
         });
         sdImgReduce.setOnClickListener(new View.OnClickListener() {
@@ -249,6 +339,11 @@ public class FrUserProfileActUser extends Fragment{
             @Override
             public void onClick(View v) {
                 showContentViewSecDatos();
+                //L.t(getContext(),"Vida: "+editTextVida.getText().toString());
+                sendDatosToBackend(getContext(),editTextVida.getText().toString(),
+                        editTextAtq.getText().toString(),editTextDef.getText().toString(),
+                        editTextNivel.getText().toString(),editTextPais.getText().toString(),
+                        editTextEspecialidad.getText().toString(),userRegistro.getNick_name());
             }
         });
         sdImgCancel.setOnClickListener(new View.OnClickListener() {
@@ -259,7 +354,7 @@ public class FrUserProfileActUser extends Fragment{
         });
 
     }
-    public void setSeccionEQ(View rootView){
+    public void setSeccionEQ(final View rootView){
         sEQimgExpand=(ImageView)rootView.findViewById(R.id.sEQImgExpand);
         sEQimgReduce=(ImageView)rootView.findViewById(R.id.sEQImgReduce);
         secEQ=(RelativeLayout) rootView.findViewById(R.id.secEQ);
@@ -301,7 +396,7 @@ public class FrUserProfileActUser extends Fragment{
         sEQimgExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expandContentSeccionEQ();
+                expandContentSeccionEQ(rootView);
             }
         });
         sEQimgReduce.setOnClickListener(new View.OnClickListener() {
@@ -321,29 +416,39 @@ public class FrUserProfileActUser extends Fragment{
             @Override
             public void onClick(View v) {
                 showContentViewSecEQ();
+              /*  L.t(getContext(),"PJ: "+clasePj+
+                                "\nHel: "+helmetPj+
+                                "\nArm: "+armorPj+
+                                "\nHan: "+handPj+
+                                "\nBoo: "+bootPj+
+                                "\nWep: "+weapPj+
+                                "\nCap: "+capPj+
+                                "\nAcc: "+accPj);*/
+
+                sendEQToBackend(getContext(),helmetPj,armorPj,handPj,bootPj,weapPj,capPj,accPj,player.getNick_name(),clasePj);
+
             }
         });
         sEQimgCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showContentViewSecEQ();
-                setSpLisWikiPosition(spAcc,listComun,player.getAccesorio(),imgAcc);
-                if(player.getClase().equals("luke")){
-                    spTipoPj.setSelection(0);
-                    setSpWikiTypeOnEdition(0);
-                    setSpPositionWikiEQ(listLukeArm,listLukeWep,listLukeCap);
-                }
-                else if(player.getClase().equals("khara")){
-                    spTipoPj.setSelection(1);
-                    setSpWikiTypeOnEdition(1);
-                    setSpPositionWikiEQ(listKharaArm,listKharaWep,listKharaCap);
-                }
-                else if(player.getClase().equals("vango")){
-                    spTipoPj.setSelection(2);
-                    setSpWikiTypeOnEdition(2);
-                    setSpPositionWikiEQ(listVangoArm,listVangoWep,listVangoCap);
-                }
-
+                    showContentViewSecEQ();
+                    setSpLisWikiPosition(spAcc,listComun,player.getAccesorio(),imgAcc);
+                    if(player.getClase().equals("luke")){
+                        spTipoPj.setSelection(0);
+                        setSpWikiTypeOnEdition(0);
+                        setSpPositionWikiEQ(listLukeArm,listLukeWep,listLukeCap);
+                    }
+                    else if(player.getClase().equals("khara")){
+                        spTipoPj.setSelection(1);
+                        setSpWikiTypeOnEdition(1);
+                        setSpPositionWikiEQ(listKharaArm,listKharaWep,listKharaCap);
+                    }
+                    else if(player.getClase().equals("vango")){
+                        spTipoPj.setSelection(2);
+                        setSpWikiTypeOnEdition(2);
+                        setSpPositionWikiEQ(listVangoArm,listVangoWep,listVangoCap);
+                    }
             }
         });
 
@@ -359,6 +464,128 @@ public class FrUserProfileActUser extends Fragment{
                     setSpPositionWikiEQ(listKharaArm,listKharaWep,listKharaCap);}
                 else if(position==2 && player.getClase().equals("vango")){
                     setSpPositionWikiEQ(listVangoArm,listVangoWep,listVangoCap);}
+
+                if(position==0){
+                    clasePj="luke";
+                }else if(position==1){
+                    clasePj="khara";
+                }else if(position==2){
+                    clasePj="vango";
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spHelmet.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(clasePj.equals("luke")){
+                    helmetPj=listLukeArm.get(position).getCodeName();
+                }else if(clasePj.equals("khara")){
+                    helmetPj=listKharaArm.get(position).getCodeName();
+                }else if(clasePj.equals("vango")){
+                    helmetPj=listVangoArm.get(position).getCodeName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spArmor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(clasePj.equals("luke")){
+                    armorPj=listLukeArm.get(position).getCodeName();
+                }else if(clasePj.equals("khara")){
+                    armorPj=listKharaArm.get(position).getCodeName();
+                }else if(clasePj.equals("vango")){
+                    armorPj=listVangoArm.get(position).getCodeName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spHand.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(clasePj.equals("luke")){
+                    handPj=listLukeArm.get(position).getCodeName();
+                }else if(clasePj.equals("khara")){
+                    handPj=listKharaArm.get(position).getCodeName();
+                }else if(clasePj.equals("vango")){
+                    handPj=listVangoArm.get(position).getCodeName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spBoot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(clasePj.equals("luke")){
+                    bootPj=listLukeArm.get(position).getCodeName();
+                }else if(clasePj.equals("khara")){
+                    bootPj=listKharaArm.get(position).getCodeName();
+                }else if(clasePj.equals("vango")){
+                    bootPj=listVangoArm.get(position).getCodeName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spWeap.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(clasePj.equals("luke")){
+                    weapPj=listLukeWep.get(position).getCodeName();
+                }else if(clasePj.equals("khara")){
+                    weapPj=listKharaWep.get(position).getCodeName();
+                }else if(clasePj.equals("vango")){
+                    weapPj=listVangoWep.get(position).getCodeName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spCap.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(clasePj.equals("luke")){
+                    capPj=listLukeCap.get(position).getCodeName();
+                }else if(clasePj.equals("khara")){
+                    capPj=listKharaCap.get(position).getCodeName();
+                }else if(clasePj.equals("vango")){
+                    capPj=listVangoCap.get(position).getCodeName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spAcc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    accPj=listComun.get(position).getCodeName();
 
             }
 
@@ -454,13 +681,15 @@ public class FrUserProfileActUser extends Fragment{
     String imgPath,  encodeImageString;
     Bitmap bitmap;
     private static int RESULT_LOAD_IMG = 1;
+    private static int RESULT_LOAD_IMG_PERFIL = 11;
+    private static int RESULT_LOAD_IMG_INFO = 22;
 
-    public void loadImagefromGallery() {
+    public void loadImagefromGallery(int result) {
         // Create intent to Open Image applications like Gallery, Google Photos
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // Start the Intent
-        startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+        startActivityForResult(galleryIntent, result);
     }
 
     @Override
@@ -468,7 +697,58 @@ public class FrUserProfileActUser extends Fragment{
         super.onActivityResult(requestCode, resultCode, data);
         try {
             // When an Image is picked
-            if (requestCode == RESULT_LOAD_IMG && resultCode== getActivity().RESULT_OK
+            if(requestCode == RESULT_LOAD_IMG_PERFIL && resultCode== getActivity().RESULT_OK
+                    && null != data){
+                // Get the Image from data
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor =getActivity().getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgPath = cursor.getString(columnIndex);
+                cursor.close();
+
+                //Setear imagen en el app
+                imgPerfil.setImageBitmap(BitmapFactory
+                        .decodeFile(imgPath));
+
+
+                saveImgPerfil.setVisibility(View.VISIBLE);
+                imgPerfil.setClickable(true);
+
+
+
+
+            }else if(requestCode == RESULT_LOAD_IMG_INFO && resultCode== getActivity().RESULT_OK
+                    && null != data){
+                // Get the Image from data
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+                // Get the cursor
+                Cursor cursor =getActivity().getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                // Move to first row
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                imgPath = cursor.getString(columnIndex);
+                cursor.close();
+
+                //Setear imagen en el app
+                imgInfo.setImageBitmap(BitmapFactory
+                        .decodeFile(imgPath));
+
+                saveImgInfo.setVisibility(View.VISIBLE);
+                imgInfo.setClickable(true);
+
+            }
+            else if (requestCode == RESULT_LOAD_IMG && resultCode== getActivity().RESULT_OK
                     && null != data) {
                 // Get the Image from data
                 Uri selectedImage = data.getData();
@@ -488,7 +768,7 @@ public class FrUserProfileActUser extends Fragment{
                 imgPerfil.setImageBitmap(BitmapFactory
                         .decodeFile(imgPath));
 
-                encodeImg();
+               // encodeImg();
 
                 /*
                 // Get the Image's file name
@@ -500,7 +780,14 @@ public class FrUserProfileActUser extends Fragment{
             } else {
                 Toast.makeText(getContext(), "You haven't picked Image",
                         Toast.LENGTH_LONG).show();
+                imgInfo.setClickable(true);
+                imgPerfil.setClickable(true);
             }
+
+
+
+
+
         } catch (Exception e) {
             Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_LONG)
                     .show();
@@ -521,13 +808,13 @@ public class FrUserProfileActUser extends Fragment{
             @Override
             protected String doInBackground(Void... params) {
                 BitmapFactory.Options options0 = new BitmapFactory.Options();
-                options0.inSampleSize = 3;
+                options0.inSampleSize = 1;
                 // options.inJustDecodeBounds = true;
                 options0.inScaled = false;
                 options0.inDither = false;
                 options0.inPreferredConfig = Bitmap.Config.ARGB_8888;
 
-                bitmap = BitmapFactory.decodeFile(imgPath,options0);
+                bitmap = BitmapFactory.decodeFile(imgPath);
 
                 ByteArrayOutputStream baos0 = new ByteArrayOutputStream();
 
@@ -552,14 +839,43 @@ public class FrUserProfileActUser extends Fragment{
     public void checkImgEncode(){
         L.t(getContext(),"IMG En: "+encodeImageString.substring(0,50))
         ;progressDialog.dismiss();
-        sendImageToBackend(getContext() ,encodeImageString);
+        sendImageToBackend(getContext() ,encodeImageString,tipoIMGUPLOAD);
     }
 
 
 
     //Seccion Expandibles Funcionalidades de Vistas VISIBLE OR GONE
-    public void expandContentSeccionDatos(){
+
+    public void showContentEditionNickName(){
+        textNickName.setVisibility(View.GONE);
+        NNimgEdit.setVisibility(View.GONE);
+
+        editTextNickName.setVisibility(View.VISIBLE);
+        NNimgSave.setVisibility(View.VISIBLE);
+        NNimgCancel.setVisibility(View.VISIBLE);
+
+    }
+    public void showContentViewNickName(){
+        textNickName.setVisibility(View.VISIBLE);
+        NNimgEdit.setVisibility(View.VISIBLE);
+
+        editTextNickName.setVisibility(View.GONE);
+        NNimgSave.setVisibility(View.GONE);
+        NNimgCancel.setVisibility(View.GONE);
+    }
+
+
+    public void expandContentSeccionDatos(View rootView){
         showContentViewSecDatos();
+        YoYo.with(Techniques.BounceInDown)
+                .duration(1000)
+                .playOn(rootView.findViewById(R.id.secDatos));
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1000)
+                .playOn(rootView.findViewById(R.id.sdImgReduce));
+        YoYo.with(Techniques.Wave)
+                .duration(2000)
+                .playOn(rootView.findViewById(R.id.sdImgEditar));
         tableLayoutSecdatos.setVisibility(View.VISIBLE);
         sdImgReduce.setVisibility(View.VISIBLE);
         sdImgExpand.setVisibility(View.GONE);
@@ -614,8 +930,18 @@ public class FrUserProfileActUser extends Fragment{
 
     }
 
-    public void expandContentSeccionEQ(){
+    public void expandContentSeccionEQ(View rootView){
         showContentViewSecEQ();
+        YoYo.with(Techniques.BounceInDown)
+                .duration(1000)
+                .playOn(rootView.findViewById(R.id.secEQ));
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1000)
+                .playOn(rootView.findViewById(R.id.sEQImgReduce));
+        YoYo.with(Techniques.Wave)
+                .duration(2000)
+                .playOn(rootView.findViewById(R.id.sEQImgEditar));
+
         secEQ.setVisibility(View.VISIBLE);
         sEQimgReduce.setVisibility(View.VISIBLE);
         sEQimgExpand.setVisibility(View.GONE);
@@ -881,8 +1207,9 @@ public class FrUserProfileActUser extends Fragment{
         return player;
     }
 
+    //upload IMAGEN PROFILE INFO
     private void sendImageToBackend(
-            final Context context, final String imgEncode) {
+            final Context context, final String imgEncode,final String imgTipo) {
         progressDialog.setMessage("Cargando ...");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -895,6 +1222,10 @@ public class FrUserProfileActUser extends Fragment{
         Map<String, String> map = new HashMap<>();
         map.put("uploadImg", "1");
         map.put("imgEncode",imgEncode);
+        map.put("codigo","101fd44");
+        map.put("imgTipo",imgTipo);
+
+
 
 
         JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
@@ -969,20 +1300,375 @@ public class FrUserProfileActUser extends Fragment{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            sendImageToBackend(context, imgEncode);
+                            sendImageToBackend(context, imgEncode,imgTipo);
                         }
                     });
                     alertDialog.show();
 
                 }else
                 {
-                    sendImageToBackend(context, imgEncode);
+                    sendImageToBackend(context, imgEncode, imgTipo);
                 }
             }
         });
         requestQueue.add(request);
     }
 
+    //Upload NickName
+    private void sendNickNameToBackend(
+            final Context context, final String nickNameNew,final String nickNameOld) {
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
+        String url = "http://ebfiends.esy.es/public/update_jugador";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("uploadNickName", "1");
+        map.put("nickNameNew",nickNameNew);
+        map.put("nickNameOld",nickNameOld);
+        map.put("codigo","101fd44");
+
+
+
+
+        JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
+                url,new JSONObject(map), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
+                try{
+                    String estado="NA",tipo="NA", msj="NA";
+                    if(response.has(Key.Answer.ESTADO)&&
+                            !response.isNull(Key.Answer.ESTADO)){
+                        estado = response.getString(Key.Answer.ESTADO);
+                    }
+                    if(response.has(Key.Answer.MSJ)&&
+                            !response.isNull(Key.Answer.MSJ)){
+                        msj = response.getString(Key.Answer.MSJ);
+                    }
+
+                    if(estado.equals("1")){
+                        L.t(context,msj);
+                        MyApp.getWritableDatabase().updateUserRegistroNickName(nickNameNew);
+                        clickCallBackAdmin.reCalFrProfile();
+
+                    }else if(estado.equals("2")){
+                        L.t(context,msj);
+                    }else if(estado.equals("3")){
+                        L.t(context,msj);
+                    }
+
+
+
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    error.printStackTrace();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        L.t(context, getResources().getString(R.string.volley_error_time));
+
+                    } else if (error instanceof AuthFailureError) {
+                        L.t(context, getResources().getString(R.string.volley_error_aut));
+
+                    } else if (error instanceof ServerError) {
+                        L.t(context, getResources().getString(R.string.volley_error_serv));
+
+                    } else if (error instanceof NetworkError) {
+                        L.t(context, getResources().getString(R.string.volley_error_net));
+
+                    } else if (error instanceof ParseError) {
+                        L.t(context, getResources().getString(R.string.volley_error_par));
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            sendNickNameToBackend(context, nickNameNew,nickNameOld);
+                        }
+                    });
+                    alertDialog.show();
+
+                }else
+                {
+                    sendNickNameToBackend(context, nickNameNew, nickNameOld);
+                }
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    //Upload Datos
+    private void sendDatosToBackend(
+            final Context context, final String vida,final String atq,
+            final String def,final String nivel,
+            final String pais,final String espe, final String nickName) {
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
+        String url = "http://ebfiends.esy.es/public/update_jugador";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("uploadDatos", "1");
+        map.put("nickName",nickName);
+        map.put("vida",vida);
+        map.put("atq",atq);
+        map.put("def",def);
+        map.put("nivel",nivel);
+        map.put("pais",pais);
+        map.put("espe",espe);
+        map.put("codigo","101fd44");
+
+
+
+
+        JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
+                url,new JSONObject(map), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
+                try{
+                    String estado="NA",tipo="NA", msj="NA";
+                    if(response.has(Key.Answer.ESTADO)&&
+                            !response.isNull(Key.Answer.ESTADO)){
+                        estado = response.getString(Key.Answer.ESTADO);
+                    }
+                    if(response.has(Key.Answer.MSJ)&&
+                            !response.isNull(Key.Answer.MSJ)){
+                        msj = response.getString(Key.Answer.MSJ);
+                    }
+
+                    if(estado.equals("1")){
+                        L.t(context,msj);
+                        clickCallBackAdmin.reCalFrProfile();
+
+                    }else if(estado.equals("2")){
+                        L.t(context,msj);
+                    }else if(estado.equals("3")){
+                        L.t(context,msj);
+                    }
+
+
+
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    error.printStackTrace();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        L.t(context, getResources().getString(R.string.volley_error_time));
+
+                    } else if (error instanceof AuthFailureError) {
+                        L.t(context, getResources().getString(R.string.volley_error_aut));
+
+                    } else if (error instanceof ServerError) {
+                        L.t(context, getResources().getString(R.string.volley_error_serv));
+
+                    } else if (error instanceof NetworkError) {
+                        L.t(context, getResources().getString(R.string.volley_error_net));
+
+                    } else if (error instanceof ParseError) {
+                        L.t(context, getResources().getString(R.string.volley_error_par));
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            sendDatosToBackend(context,vida,atq,def,nivel,pais,espe,nickName);
+                        }
+                    });
+                    alertDialog.show();
+
+                }else
+                {
+                    sendDatosToBackend(context,vida,atq,def,nivel,pais,espe,nickName);
+                }
+            }
+        });
+        requestQueue.add(request);
+    }
+
+    //Upload EQ
+    private void sendEQToBackend(
+            final Context context, final String helmet,final String armor,
+            final String hand,final String boot,
+            final String weap,final String cap,final String acc, final String nickName,final String clase) {
+        progressDialog.setMessage("Cargando ...");
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+
+
+        String url = "http://ebfiends.esy.es/public/update_jugador";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("uploadEQ", "1");
+        map.put("nickName",nickName);
+        map.put("clase",clase);
+        map.put("helmet",helmet);
+        map.put("armor",armor);
+        map.put("hand",hand);
+        map.put("boot",boot);
+        map.put("weap",weap);
+        map.put("cap",cap);
+        map.put("acc",acc);
+        map.put("codigo","101fd44");
+
+
+
+
+        JsonObjectRequest request= new JsonObjectRequest(Request.Method.POST,
+                url,new JSONObject(map), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
+                try{
+                    String estado="NA",tipo="NA", msj="NA";
+                    if(response.has(Key.Answer.ESTADO)&&
+                            !response.isNull(Key.Answer.ESTADO)){
+                        estado = response.getString(Key.Answer.ESTADO);
+                    }
+                    if(response.has(Key.Answer.MSJ)&&
+                            !response.isNull(Key.Answer.MSJ)){
+                        msj = response.getString(Key.Answer.MSJ);
+                    }
+
+                    if(estado.equals("1")){
+                        L.t(context,msj);
+                        clickCallBackAdmin.reCalFrProfile();
+
+                    }else if(estado.equals("2")){
+                        L.t(context,msj);
+                    }else if(estado.equals("3")){
+                        L.t(context,msj);
+                    }
+
+
+
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                progressDialog.dismiss();
+                persistenTry++;
+                String auxError="";
+
+                if(persistenTry>=5) {
+                    persistenTry = 0;
+
+                    error.printStackTrace();
+                    if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                        L.t(context, getResources().getString(R.string.volley_error_time));
+
+                    } else if (error instanceof AuthFailureError) {
+                        L.t(context, getResources().getString(R.string.volley_error_aut));
+
+                    } else if (error instanceof ServerError) {
+                        L.t(context, getResources().getString(R.string.volley_error_serv));
+
+                    } else if (error instanceof NetworkError) {
+                        L.t(context, getResources().getString(R.string.volley_error_net));
+
+                    } else if (error instanceof ParseError) {
+                        L.t(context, getResources().getString(R.string.volley_error_par));
+                    }
+
+                    //  textViewVolleyError.setVisibility(View.VISIBLE);
+                    AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+                    alertDialog.setTitle("Error en la Nube");
+                    alertDialog.setMessage("Error: " + auxError + "\n\n"
+                            + "Reintentar Conexion?");
+                    alertDialog.setCancelable(false);
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            sendEQToBackend(context,helmet,armor,hand,boot,weap,cap,acc,nickName,clase);
+                        }
+                    });
+                    alertDialog.show();
+
+                }else
+                {
+                    sendEQToBackend(context,helmet,armor,hand,boot,weap,cap,acc,nickName,clase);
+                }
+            }
+        });
+        requestQueue.add(request);
+    }
 
 
 
@@ -1261,7 +1947,7 @@ public class FrUserProfileActUser extends Fragment{
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    loadImage("http://ebfiends.esy.es/public/Misc/Jugador/espera_pj.jpg",img);
                 }
             });
         }
@@ -1269,16 +1955,19 @@ public class FrUserProfileActUser extends Fragment{
 
 
 
+    private ClickCallBackAdmin clickCallBackAdmin;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
             //gracias al metodo on Attach damos valor al clickCallBack evitamos Null value
-
+            clickCallBackAdmin=(ClickCallBackAdmin)context;
             //  mListener = (OnFragmentInteractionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
+
+
 }
