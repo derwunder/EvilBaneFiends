@@ -18,4 +18,6 @@ public class UrlEP {
 
     public static final String EBFIENDS_UPLOAD_TESTER="http://ebfiends.esy.es/public/upload_img_tester";
 
+    public static final String EBFIENDS_CLAN_BATALLA="http://ebfiends.esy.es/public/clan_batalla";
+
 }

@@ -51,7 +51,6 @@
                         android:minWidth="90dp"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
-                        android:text="codigo"
                         android:id="@+id/editTextCodigo" />
 
                     <TextView

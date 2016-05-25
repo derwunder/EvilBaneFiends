@@ -111,14 +111,26 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
         mCollapsingToolbarLayout.setTitle(userRegistro.getNick_name());
         mAppBarLayout.setExpanded(true,true);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.contenedor_base, FrViewPagerUserActUser.newInstance(CODIGO))
-                .commit();
+        frChange(userRegistro.getAdmin());
 
 
 
     }
+    public void frChange(String admin){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(admin.equals("0")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrUserProfileActUser.newInstance(CODIGO))
+                    .commit();
+        }
+        else if(admin.equals("1")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrViewPagerUserActUser.newInstance(CODIGO))
+                    .commit();
+        }
+
+    }
+
     public void iniToolBar(){
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
@@ -166,10 +178,7 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
     public void reCalFrProfile() {
         userRegistro=MyApp.getWritableDatabase().getUserRegistro();
         mCollapsingToolbarLayout.setTitle(userRegistro.getNick_name());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.contenedor_base, FrViewPagerUserActUser.newInstance(CODIGO))
-                .commit();
+        frChange(userRegistro.getAdmin());
     }
 
 

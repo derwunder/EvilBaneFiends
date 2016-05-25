@@ -59,8 +59,7 @@
                         android:minWidth="120dp"
                         android:inputType="textPassword"
                         android:selectAllOnFocus="true"
-                        android:id="@+id/editTextCodigo"
-                        android:text="codigo" />
+                        android:id="@+id/editTextCodigo" />
 
                 </LinearLayout>
                 <ImageView

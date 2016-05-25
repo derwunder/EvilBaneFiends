@@ -58,8 +58,9 @@ public class FrViewPagerUserActUser extends Fragment {
 
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText("Perfil");
-        tabLayout.getTabAt(1).setText("Codgigo de Miembros");
-       // tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.getTabAt(1).setText("Batalla Clan");
+        tabLayout.getTabAt(2).setText("Codgigo de Miembros");
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         //tabLayout.getTabAt(1).setIcon(R.drawable.ic_insert_invitation_white_24dp);
         // tabLayout.setTabGravity(TabLayout.GRAVITY_CENTER);

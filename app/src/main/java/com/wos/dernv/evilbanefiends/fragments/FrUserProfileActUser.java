@@ -1222,7 +1222,7 @@ public class FrUserProfileActUser extends Fragment {
         Map<String, String> map = new HashMap<>();
         map.put("uploadImg", "1");
         map.put("imgEncode",imgEncode);
-        map.put("codigo","101fd44");
+        map.put("codigo",getArguments().getString("CODIGO"));
         map.put("imgTipo",imgTipo);
 
 
@@ -1330,7 +1330,7 @@ public class FrUserProfileActUser extends Fragment {
         map.put("uploadNickName", "1");
         map.put("nickNameNew",nickNameNew);
         map.put("nickNameOld",nickNameOld);
-        map.put("codigo","101fd44");
+        map.put("codigo",getArguments().getString("CODIGO"));
 
 
 
@@ -1451,7 +1451,7 @@ public class FrUserProfileActUser extends Fragment {
         map.put("nivel",nivel);
         map.put("pais",pais);
         map.put("espe",espe);
-        map.put("codigo","101fd44");
+        map.put("codigo",getArguments().getString("CODIGO"));
 
 
 
@@ -1573,7 +1573,7 @@ public class FrUserProfileActUser extends Fragment {
         map.put("weap",weap);
         map.put("cap",cap);
         map.put("acc",acc);
-        map.put("codigo","101fd44");
+        map.put("codigo",getArguments().getString("CODIGO"));
 
 
 

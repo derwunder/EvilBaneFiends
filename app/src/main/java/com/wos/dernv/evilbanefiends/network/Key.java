@@ -12,6 +12,13 @@ public interface Key {
         String ESTADO="estado",MSJ="mensaje";
         String TIPO="tipo";
     }
+    interface JsGetClanBatalla {
+        String CLAN_BATALLA="clan_batalla";
+        String BUFF_ATT="buffAtt",BUFF_DEF="buffDef",BUFF_CRI="buffCri";
+        String DETALLE = "detalle";
+        String VID1 = "vid1",VID2="vid2",VID3="vid3";
+        String IMG_FORMACION="img_formacion";
+    }
     interface JsGetCatCod {
         String CATCOD="catCod";
         String ID="id";

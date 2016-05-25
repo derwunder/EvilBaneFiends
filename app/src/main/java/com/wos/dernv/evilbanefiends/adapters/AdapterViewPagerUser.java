@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.wos.dernv.evilbanefiends.fragments.FrAdminCodeEditionActUser;
+import com.wos.dernv.evilbanefiends.fragments.FrBattleClanEditionActUser;
 import com.wos.dernv.evilbanefiends.fragments.FrUserProfileActUser;
 import com.wos.dernv.evilbanefiends.fragments.FrWikiEquipo;
 import com.wos.dernv.evilbanefiends.fragments.FrWikiHab;
@@ -28,7 +29,8 @@ public class AdapterViewPagerUser extends FragmentStatePagerAdapter {
         Fragment fragment=null;
         switch (position){
             case 0: fragment = FrUserProfileActUser.newInstance(CODIGO); break;
-            case 1: fragment = FrAdminCodeEditionActUser.newInstance(); break;
+            case 1: fragment = FrBattleClanEditionActUser.newInstance(CODIGO); break;
+            case 2: fragment = FrAdminCodeEditionActUser.newInstance(); break;
 
         }
         return fragment;
@@ -36,6 +38,6 @@ public class AdapterViewPagerUser extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView2"
+        android:layout_centerVertical="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_centerHorizontal="true" >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="75dp"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/rConImgFormacion"
+                android:background="@drawable/bg_datos_user_fr"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/imgFormacion"
+                    android:src="@drawable/ic_launcher"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/saveImgFormacion"
+                    android:src="@drawable/ic_save_white_36dp"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:background="@drawable/bg_sec_head_user_fr"
+                android:layout_marginBottom="5dp"
+                android:weightSum="6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_weight="4"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_gravity="center|left"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/colorWhite"
+                    android:text="Detalles"
+                    android:id="@+id/textSecDatos" />
+                <ImageView
+                    android:layout_weight="0.01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgExpand"
+                    android:src="@drawable/ic_expand_more_white_36dp"/>
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgReduce"
+                    android:src="@drawable/ic_expand_less_white_36dp"/>
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgEditar"
+                    android:src="@drawable/ic_mode_edit_white_36dp"/>
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgSave"
+                    android:src="@drawable/ic_save_white_36dp"/>
+                <ImageView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/sdImgCancel"
+                    android:src="@drawable/ic_cancel_white_36dp"/>
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:id="@+id/loadImg"
+                    android:src="@drawable/ic_khara_00"/>
+            </LinearLayout>
+
+            <TableLayout
+                android:visibility="visible"
+                android:layout_marginBottom="5dp"
+                android:paddingRight="5dp"
+                android:background="@drawable/bg_datos_user_fr"
+                android:id="@+id/secDatos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgBuffAtt"
+                        android:src="@drawable/clan_buf_att_00"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Buff Att"
+                        android:id="@+id/textBuffAttValue"
+                        android:layout_column="2" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="180dp"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/editTextBuffAtt"
+                        android:layout_column="3" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgBuffDef"
+                        android:src="@drawable/clan_buf_def_00"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Buff Deff"
+                        android:id="@+id/textBuffDefValue"
+                        android:layout_column="2" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:maxWidth="180dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/editTextBuffDef"
+                        android:layout_column="3" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgBuffCri"
+                        android:src="@drawable/clan_buf_cri_00"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Buff Cir"
+                        android:id="@+id/textBuffCriValue"
+                        android:layout_column="2" />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:maxWidth="180dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/editTextBuffCri"
+                        android:layout_column="3" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgDesc"
+                        android:src="@drawable/ic_battle_on_00"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Descripcion"
+                        android:id="@+id/textDescValue"
+                        android:layout_column="2" />
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:maxWidth="180dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:id="@+id/editTextDesc"
+                        android:layout_column="3" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgVid1"
+                        android:src="@drawable/ic_youtube_play_white_36dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Id Ytube 1"
+                        android:id="@+id/textVid1Value"
+                        android:layout_column="2" />
+
+                    <EditText
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextVid1"
+                        android:layout_column="3" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgVid2"
+                        android:src="@drawable/ic_youtube_play_white_36dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Id Ytube 2"
+                        android:id="@+id/textVid2Value"
+                        android:layout_column="2" />
+
+                    <EditText
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextVid2"
+                        android:layout_column="3" />
+                </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:id="@+id/imgVid3"
+                        android:src="@drawable/ic_youtube_play_white_36dp"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:layout_gravity="center|left"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/colorWhite"
+                        android:text="Id Ytube 3"
+                        android:id="@+id/textVid3Value"
+                        android:layout_column="2" />
+
+                    <EditText
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/editTextVid3"
+                        android:layout_column="3" />
+                </TableRow>
+
+
+
+            </TableLayout>
+
+           <HorizontalScrollView
+               android:id="@+id/conentScrollVid"
+               android:layout_width="match_parent"
+               android:layout_height="250dp"
+               >
+               <LinearLayout
+                   android:orientation="horizontal"
+                   android:layout_width="wrap_content"
+                   android:layout_height="250dp">
+
+                   <LinearLayout
+                       android:id="@+id/contenedorWebViewVideo1"
+                       android:layout_margin="8dp"
+                       android:background="@drawable/bg_datos_user_fr"
+                       android:layout_width="match_parent"
+                       android:layout_height="225dp">
+                       <WebView
+                           android:layout_margin="3dp"
+                           android:id="@+id/webViewVideo1"
+                           android:layout_width="320dp"
+                           android:layout_height="220dp"/>
+
+                   </LinearLayout>
+                   <LinearLayout
+                       android:id="@+id/contenedorWebViewVideo2"
+                       android:layout_margin="8dp"
+                       android:background="@drawable/bg_datos_user_fr"
+                       android:layout_width="match_parent"
+                       android:layout_height="225dp">
+                       <WebView
+                           android:layout_margin="3dp"
+                           android:id="@+id/webViewVideo2"
+                           android:layout_width="320dp"
+                           android:layout_height="220dp"/>
+
+                   </LinearLayout>
+                   <LinearLayout
+                       android:id="@+id/contenedorWebViewVideo3"
+                       android:layout_margin="8dp"
+                       android:background="@drawable/bg_datos_user_fr"
+                       android:layout_width="match_parent"
+                       android:layout_height="225dp">
+                       <WebView
+                           android:layout_margin="3dp"
+                           android:id="@+id/webViewVideo3"
+                           android:layout_width="320dp"
+                           android:layout_height="220dp"/>
+
+                   </LinearLayout>
+
+               </LinearLayout>
+               
+           </HorizontalScrollView>
+
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+</RelativeLayout>

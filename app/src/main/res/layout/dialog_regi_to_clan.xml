@@ -51,7 +51,8 @@
                         android:minWidth="120dp"
                         android:inputType="textPersonName"
                         android:selectAllOnFocus="true"
-                        android:text="Nick Name"
+                        android:text="NickName"
+                        android:digits="_,qwertzuiopasdfghjklyxcvbnm,QWERTYUIOPASDFGHJKLZXCVBNM,0123456789"
                         android:id="@+id/editTextNickName" />
 
                     <TextView

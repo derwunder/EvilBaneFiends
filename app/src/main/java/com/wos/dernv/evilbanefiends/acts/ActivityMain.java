@@ -41,6 +41,8 @@ import com.wos.dernv.evilbanefiends.dialogs.DialogMsjToNotify;
 import com.wos.dernv.evilbanefiends.dialogs.DialogPassUserProfile;
 import com.wos.dernv.evilbanefiends.dialogs.DialogRegiToClan;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
+import com.wos.dernv.evilbanefiends.fragments.FrBattleClanActMain;
+import com.wos.dernv.evilbanefiends.fragments.FrBattleClanEditionActUser;
 import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrNotifyActMain;
@@ -202,6 +204,10 @@ public class ActivityMain extends AppCompatActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrEqPerfectoActMain.newInstance())
                     .commit();
+        }else if(where.equals("clanBatalla")){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedor_base, FrBattleClanActMain.newInstance())
+                    .commit();
         }else if(where.equals("wikia")){
             mAppBarLayout.setExpanded(false,false);
             fragmentManager.beginTransaction()
@@ -296,10 +302,18 @@ public class ActivityMain extends AppCompatActivity
             stateBackPress=1000;
             fragmentChanger("eqPerfecto");
         }
+        if(position==3){
+
+            mAppBarLayout.setExpanded(false,true);
+            mCollapsingToolbarLayout.setTitle("Batalla de Clan");
+
+            stateBackPress=1000;
+            fragmentChanger("clanBatalla");
+        }
         if(position==4){
 
             mAppBarLayout.setExpanded(false,true);
-            mCollapsingToolbarLayout.setTitle("Wikia Por Fiends");
+            mCollapsingToolbarLayout.setTitle("Wikia Por OlympuS");
 
             stateBackPress=1000;
             fragmentChanger("wikia");
