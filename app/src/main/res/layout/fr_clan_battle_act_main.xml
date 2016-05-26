@@ -323,7 +323,7 @@
            <HorizontalScrollView
                android:id="@+id/conentScrollVid"
                android:layout_width="match_parent"
-               android:layout_height="250dp"
+               android:layout_height="wrap_content"
                >
                <LinearLayout
                    android:orientation="horizontal"
@@ -368,6 +368,78 @@
                            android:layout_width="320dp"
                            android:layout_height="220dp"/>
 
+                   </LinearLayout>
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:visibility="gone"
+                       android:id="@+id/coniVidLink1"
+                       android:layout_margin="8dp"
+                       android:layout_gravity="center"
+                       android:background="@drawable/bg_datos_user_fr"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                       <ImageView
+                           android:layout_gravity="center"
+                           android:id="@+id/iVidLink1"
+                           android:padding="5dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_youtube_play_white_36dp"/>
+                       <TextView
+                           android:padding="5dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:textSize="18sp"
+                           android:textColor="@color/colorWhite"
+                           android:text="1ero - Battle Clan"/>
+                   </LinearLayout>
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:visibility="gone"
+                       android:id="@+id/coniVidLink2"
+                       android:layout_margin="8dp"
+                       android:layout_gravity="center"
+                       android:background="@drawable/bg_datos_user_fr"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                       <ImageView
+                           android:layout_gravity="center"
+                           android:id="@+id/iVidLink2"
+                           android:padding="5dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_youtube_play_white_36dp"/>
+                       <TextView
+                           android:padding="5dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:textSize="18sp"
+                           android:textColor="@color/colorWhite"
+                           android:text="2do  - Battle Clan"/>
+                   </LinearLayout>
+                   <LinearLayout
+                       android:orientation="vertical"
+                       android:visibility="gone"
+                       android:id="@+id/coniVidLink3"
+                       android:layout_margin="8dp"
+                       android:layout_gravity="center"
+                       android:background="@drawable/bg_datos_user_fr"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                       <ImageView
+                           android:layout_gravity="center"
+                           android:id="@+id/iVidLink3"
+                           android:padding="5dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/ic_youtube_play_white_36dp"/>
+                       <TextView
+                           android:padding="5dp"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:textSize="18sp"
+                           android:textColor="@color/colorWhite"
+                           android:text="3ero - Battle Clan"/>
                    </LinearLayout>
 
                </LinearLayout>

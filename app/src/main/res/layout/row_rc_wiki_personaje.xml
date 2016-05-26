@@ -134,12 +134,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_launcher"
-        android:layout_below="@+id/contenedorPrincipal"
+        android:layout_below="@+id/coniVidLink"
         android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:id="@+id/contenedorWebViewPj"
-        android:layout_below="@+id/pjImageFull"
+        android:layout_below="@+id/contenedorPrincipal"
         android:layout_margin="8dp"
         android:background="@drawable/bg_datos_user_fr"
         android:layout_width="match_parent"
@@ -149,6 +149,33 @@
         android:id="@+id/webViewPj"
         android:layout_width="match_parent"
         android:layout_height="260dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@+id/contenedorPrincipal"
+        android:visibility="gone"
+        android:id="@+id/coniVidLink"
+        android:layout_margin="8dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_datos_user_fr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <ImageView
+        android:layout_gravity="center"
+        android:id="@+id/iVidLink"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_youtube_play_white_36dp"/>
+    <TextView
+        android:id="@+id/texiVidLink"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/colorWhite"
+        android:text="1ero - Battle Clan"/>
     </LinearLayout>
 
 

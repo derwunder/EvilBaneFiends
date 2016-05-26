@@ -228,7 +228,7 @@ public class ActivityMain extends AppCompatActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrBattleClanActMain.newInstance())
                     .commit();
-        }else if(where.equals("wikia")){
+        }else if(where.equals("wiki")){
             mAppBarLayout.setExpanded(false,false);
             fragmentManager.beginTransaction()
                     .replace(R.id.contenedor_base, FrViewPagerWikia.newInstance())
@@ -335,10 +335,10 @@ public class ActivityMain extends AppCompatActivity
         if(position==4){
 
             mAppBarLayout.setExpanded(false,true);
-            mCollapsingToolbarLayout.setTitle("Wikia Por ØlympuŜ");
+            mCollapsingToolbarLayout.setTitle("Wiki Por ØlympuŜ");
 
             stateBackPress=1000;
-            fragmentChanger("wikia");
+            fragmentChanger("wiki");
         }
         if(position==5){
 

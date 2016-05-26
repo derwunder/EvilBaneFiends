@@ -1,7 +1,10 @@
 package com.wos.dernv.evilbanefiends.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -102,6 +105,13 @@ public class AdapterRcNotify extends RecyclerView.Adapter<AdapterRcNotify.RcNoti
             }else{
                 holder.lyWebVid.setVisibility(View.VISIBLE);
                 holder.wbVid.loadUrl("http://www.youtube.com/embed/" +notifyItem.getUrl_vid() + "?autoplay=1&vq=small");
+                if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                    holder.lyWebVid.setVisibility(View.GONE);
+                    holder.coniVidLink.setVisibility(View.VISIBLE);
+                    //holder.texiVidLink.setText(wikiPersonaje.getClase());
+                    holder.iVidLink.setColorFilter(ContextCompat.getColor(context,R.color.colorTextMenuRed));
+
+                }
             }
 
             holder.showHideButton.setColorFilter(ContextCompat.getColor(context,R.color.colorWhite));
@@ -122,6 +132,10 @@ public class AdapterRcNotify extends RecyclerView.Adapter<AdapterRcNotify.RcNoti
         TextView msjText;
         WebView wbNoti, wbVid;
         LinearLayout lyWebNoti, lyWebVid;
+
+        LinearLayout coniVidLink;
+        ImageView iVidLink;
+        TextView texiVidLink;
 
         public RcNotifyViewHolder(View itemView) {
             super(itemView);
@@ -144,7 +158,10 @@ public class AdapterRcNotify extends RecyclerView.Adapter<AdapterRcNotify.RcNoti
                     .duration(800)
                     .playOn(itemView.findViewById(R.id.bodyRelative));
 
-
+            coniVidLink=(LinearLayout)itemView.findViewById(R.id.coniVidLink);
+            texiVidLink=(TextView)itemView.findViewById(R.id.texiVidLink);
+            iVidLink=(ImageView)itemView.findViewById(R.id.iVidLink);
+            iVidLink.setOnClickListener(this);
 
             relativeLayout.setOnClickListener(this);
             showHideButton.setOnClickListener(this);
@@ -229,6 +246,13 @@ public class AdapterRcNotify extends RecyclerView.Adapter<AdapterRcNotify.RcNoti
             if(v==v.findViewById(R.id.imgDelNoti)){
                 MyApp.getWritableDatabase().deleteNotiItem(listNotify.get(getAdapterPosition()).getId());
                 listNotify.remove(getAdapterPosition());notifyItemRemoved(getAdapterPosition());
+            }
+
+            if(v==v.findViewById(R.id.iVidLink)){
+                context.startActivity(new Intent(Intent.ACTION_VIEW).
+                        setData(Uri.parse("https://www.youtube.com/watch?v="+listNotify.get(getAdapterPosition()).getUrl_vid())));
+
+
             }
         }
     }

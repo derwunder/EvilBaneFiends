@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
@@ -130,7 +131,7 @@ public class FrBattleClanEditionActUser extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fr_clan_battle_act_main,container,false);
-
+        viewTest=rootView;
 
         setImgFormacion(rootView);
         setSeccionDatos(rootView);
@@ -492,7 +493,7 @@ public class FrBattleClanEditionActUser extends Fragment{
 
     }
 
-
+    private View viewTest;
     public void setValuesOfFragment(){
         textBuffAttValue.setText(clanBatalla.getBuffAtt());
         textBuffDefValue .setText(clanBatalla.getBuffDef());
@@ -519,6 +520,19 @@ public class FrBattleClanEditionActUser extends Fragment{
             lConVid1.setVisibility(View.VISIBLE); vid1Set=1;
             wbVid1.loadUrl("http://www.youtube.com/embed/" +clanBatalla.getVid1() + "?autoplay=1&vq=small");
             imgVid1.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                lConVid1.setVisibility(View.GONE);
+                LinearLayout linearLayout=(LinearLayout)viewTest.findViewById(R.id.coniVidLink1);
+                linearLayout.setVisibility(View.VISIBLE);
+                ImageView ivid1link=(ImageView)viewTest.findViewById(R.id.iVidLink1);
+                ivid1link.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+                ivid1link.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.youtube.com/watch?v="+clanBatalla.getVid1())));
+                    }
+                });
+            }
         }
         if(clanBatalla.getVid2().equals("noAsig")){
             lConVid2.setVisibility(View.GONE);vid2Set=0;
@@ -529,6 +543,19 @@ public class FrBattleClanEditionActUser extends Fragment{
             lConVid2.setVisibility(View.VISIBLE);vid2Set=1;
             wbVid2.loadUrl("http://www.youtube.com/embed/" +clanBatalla.getVid2() + "?autoplay=1&vq=small");
             imgVid2.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                lConVid2.setVisibility(View.GONE);
+                LinearLayout linearLayout=(LinearLayout)viewTest.findViewById(R.id.coniVidLink2);
+                linearLayout.setVisibility(View.VISIBLE);
+                ImageView ivid1link=(ImageView)viewTest.findViewById(R.id.iVidLink2);
+                ivid1link.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+                ivid1link.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.youtube.com/watch?v="+clanBatalla.getVid2())));
+                    }
+                });
+            }
         }
         if(clanBatalla.getVid3().equals("noAsig")){
             lConVid3.setVisibility(View.GONE);vid3Set=0;
@@ -539,6 +566,19 @@ public class FrBattleClanEditionActUser extends Fragment{
             lConVid3.setVisibility(View.VISIBLE);vid3Set=1;
             wbVid3.loadUrl("http://www.youtube.com/embed/" +clanBatalla.getVid3() + "?autoplay=1&vq=small");
             imgVid3.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                lConVid3.setVisibility(View.GONE);
+                LinearLayout linearLayout=(LinearLayout)viewTest.findViewById(R.id.coniVidLink3);
+                linearLayout.setVisibility(View.VISIBLE);
+                ImageView ivid1link=(ImageView)viewTest.findViewById(R.id.iVidLink3);
+                ivid1link.setColorFilter(ContextCompat.getColor(getContext(),R.color.colorTextMenuRed));
+                ivid1link.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.youtube.com/watch?v="+clanBatalla.getVid3())));
+                    }
+                });
+            }
         }
         if(clanBatalla.getVid1().equals("noAsig")&& clanBatalla.getVid2().equals("noAsig")&&
                 clanBatalla.getVid3().equals("noAsig")){

@@ -2,7 +2,10 @@ package com.wos.dernv.evilbanefiends.adapters;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -96,6 +99,13 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
             holder.lcontentWVPj.setVisibility(View.VISIBLE);
 
             holder.webViewPjl.loadUrl("http://www.youtube.com/embed/" +wikiPersonaje.getVideo_view()+ "?autoplay=1&vq=small");
+            if (android.os.Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+                holder.lcontentWVPj.setVisibility(View.GONE);
+                holder.coniVidLink.setVisibility(View.VISIBLE);
+                holder.texiVidLink.setText(wikiPersonaje.getClase());
+                holder.iVidLink.setColorFilter(ContextCompat.getColor(context,R.color.colorTextMenuRed));
+
+            }
             holder.pjDetalle.setText(wikiPersonaje.getDetalle());
             loadImages(wikiPersonaje.getImg_view(),holder,"imgFull");
             holder.showHideButton.setColorFilter(ContextCompat.getColor(context,R.color.colorWhite));
@@ -136,6 +146,10 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
         TextView pjNombre,pjVida,pjAtq,pjDef,pjAgi,pjDetalle;
         WebView webViewPjl;
         LinearLayout lcontentWVPj;
+
+        LinearLayout coniVidLink;
+        ImageView iVidLink;
+        TextView texiVidLink;
 
         public RcWikiPersonajeViewHolder(View itemView) {
             super(itemView);
@@ -184,8 +198,10 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
                 }
             });
 
-
-
+            coniVidLink=(LinearLayout)itemView.findViewById(R.id.coniVidLink);
+            texiVidLink=(TextView)itemView.findViewById(R.id.texiVidLink);
+            iVidLink=(ImageView)itemView.findViewById(R.id.iVidLink);
+            iVidLink.setOnClickListener(this);
 
             relativeLayout.setOnClickListener(this);
             showHideButton.setOnClickListener(this);
@@ -213,6 +229,11 @@ public class AdapterRcWikiPersonaje extends RecyclerView.Adapter<AdapterRcWikiPe
                     listVisorDetalle.set(getAdapterPosition(),true);
                 }
                 notifyItemChanged(getAdapterPosition());
+            }
+            if(v==v.findViewById(R.id.iVidLink)){
+                context.startActivity(new Intent(Intent.ACTION_VIEW).
+                        setData(Uri.parse("https://www.youtube.com/watch?v="+listWikiPersonaje.get(getAdapterPosition()).getVideo_view())));
+
             }
         }
     }
