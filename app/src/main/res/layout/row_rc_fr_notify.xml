@@ -40,7 +40,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/imgDelNoti"
         android:layout_toRightOf="@+id/imgDelNoti"
         android:layout_toEndOf="@+id/imgDelNoti">
 
@@ -79,7 +78,7 @@
                 android:alpha="0.87"
                 android:padding="4dp"
                 android:textColor="@color/colorTextPrimary"
-                android:text="Paarrollo del mismo "
+                android:text="Paarrollo del mismo se hace esta prueba dealto - "
                 android:textSize="18sp" />
 
 

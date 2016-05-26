@@ -69,10 +69,10 @@ public class FrMenuActMain extends Fragment {
         rcListMenu.setLayoutManager(manager);
 
         //Espacio al final de la Vista de menu (RC)
-     /*  OffsetDecorationMenu offsetDecorationMenu =
-                new OffsetDecorationMenu(75,35,getContext().getResources().getDisplayMetrics().density);
+       OffsetDecorationMenu offsetDecorationMenu =
+                new OffsetDecorationMenu(75,5,getContext().getResources().getDisplayMetrics().density);
         rcListMenu.addItemDecoration(offsetDecorationMenu); //pasep
-*/
+
         rcListMenu.setSoundEffectsEnabled(true);
         rcListMenu.setAdapter(adapterRcMenu);
 
@@ -97,15 +97,19 @@ public class FrMenuActMain extends Fragment {
             int dataSize = state.getItemCount();
             int position = parent.getChildAdapterPosition(view);
             GridLayoutManager grid = (GridLayoutManager)parent.getLayoutManager();
-            if ((dataSize - position) <= grid.getSpanCount()) {
+            /*if ((dataSize - position) <= grid.getSpanCount()) {
                 outRect.set(0, 0, 0, mBottomOffset);
             } else {
                 outRect.set(0, 0, 0, 0);
+            }*/
+
+            if(parent.getChildAdapterPosition(view)==4){
+                outRect.set(0, 0, 0, mBottomOffset);
             }
 
-            if(parent.getChildAdapterPosition(view)==0){
-                outRect.set(0, mTopOffset, 0, 0);
-            }
+            /*if(parent.getChildAdapterPosition(view)==0){
+                outRect.set(0, 0, 0, 0);
+            }*/
 
         }
     }

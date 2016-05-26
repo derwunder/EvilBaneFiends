@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Handle Errors"
+        android:textColor="@color/colorWhite"
         android:textStyle="bold"
         android:textSize="20sp"
         android:gravity="center"

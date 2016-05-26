@@ -35,7 +35,12 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.dialogs.DialogMsjToNotify;
 import com.wos.dernv.evilbanefiends.dialogs.DialogPassUserProfile;
@@ -67,8 +72,11 @@ public class ActivityMain extends AppCompatActivity
     //Web
     private MyVolleySingleton myVolleySingleton;
     private RequestQueue requestQueue;
+    private ImageLoader imageLoader;
     private ProgressDialog progressDialog ;
     private int persistenTry=0;
+
+    private ImageView imageViewChanger;
 
     //Backk Press
     private int stateBackPress=0;
@@ -90,7 +98,11 @@ public class ActivityMain extends AppCompatActivity
         //web var Instance
         myVolleySingleton=MyVolleySingleton.getsInstance();
         requestQueue=myVolleySingleton.getmRequestQueue();
+        imageLoader=myVolleySingleton.getmImageLoader();
         progressDialog = new ProgressDialog(this);persistenTry=0;
+
+        imageViewChanger=(ImageView)findViewById(R.id.imgViewChanger) ;
+        loadImage("http://ebfiends.esy.es/public/Misc/bg_front_app.jpg",imageViewChanger);
 
         //Grupo de Coordinacion para la actividad Base
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
@@ -109,12 +121,20 @@ public class ActivityMain extends AppCompatActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.contenedor_base, FrMenuActMain.newInstance())
                 .commit();
-//SHITTT
+
         UserRegistro userRegistro = MyApp.getWritableDatabase().getUserRegistro();
 
-        L.t(this, "Nick: "+userRegistro.getNick_name()+
+       /* L.t(this, "Nick: "+userRegistro.getNick_name()+
                     "\nMiem: "+userRegistro.getMiembro()+
-                    "\nAdmin: "+userRegistro.getAdmin());
+                    "\nAdmin: "+userRegistro.getAdmin());*/
+
+
+        MobileAds.initialize(getApplicationContext(),"ca-app-pub-1321388824434022~3278710790");
+
+        ///ADDSSS
+        AdView ad=(AdView)findViewById(R.id.adView);
+        ad.loadAd(new AdRequest.Builder().build());
+
 
     }
 
@@ -232,6 +252,7 @@ public class ActivityMain extends AppCompatActivity
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }else if(stateBackPress==1000){
             stateBackPress=0;
+            mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
             mAppBarLayout.setExpanded(true,true);
             fragmentChanger("menu");
         }
@@ -273,6 +294,7 @@ public class ActivityMain extends AppCompatActivity
         } else if (id == R.id.navigation_item_2) {
             stateBackPress=1000;
             mAppBarLayout.setExpanded(false, true);
+            mCollapsingToolbarLayout.setTitle(getResources().getString(R.string.app_name));
             mCollapsingToolbarLayout.setTitle("Fan Page Fiends");
             fragmentChanger("web");
         }
@@ -313,7 +335,7 @@ public class ActivityMain extends AppCompatActivity
         if(position==4){
 
             mAppBarLayout.setExpanded(false,true);
-            mCollapsingToolbarLayout.setTitle("Wikia Por OlympuS");
+            mCollapsingToolbarLayout.setTitle("Wikia Por ØlympuŜ");
 
             stateBackPress=1000;
             fragmentChanger("wikia");
@@ -706,4 +728,24 @@ public class ActivityMain extends AppCompatActivity
         });
         requestQueue.add(request);
     }
+
+
+    private void loadImage(String urlThumbnail , final ImageView img) {
+        if (!urlThumbnail.equals("NA")) {
+            imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+
+                    img.setImageBitmap(response.getBitmap());
+
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loadImage("http://ebfiends.esy.es/public/Misc/bg_front_app.jpg",img);
+                }
+            });
+        }
+    }
+
 }

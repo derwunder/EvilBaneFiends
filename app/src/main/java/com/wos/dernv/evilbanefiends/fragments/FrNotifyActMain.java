@@ -19,6 +19,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.adapters.AdapterRcNotify;
@@ -41,6 +43,8 @@ public class FrNotifyActMain extends Fragment {
     private RecyclerView recyclerView;
     private AdapterRcNotify adapterRcNotify;
 
+    private TextView textEmptyList;
+    private ImageView imgEmptyList;
 
     public static FrNotifyActMain newInstance() {
         FrNotifyActMain fragment = new FrNotifyActMain();
@@ -102,6 +106,11 @@ public class FrNotifyActMain extends Fragment {
                     MyApp.getWritableDatabase().deleteAllNotiItem();
                     listNotify=new ArrayList<>();
                     adapterRcNotify.setNotifyList(listNotify);
+                    textEmptyList.setText("No hay Notifiaciones");
+                    imgEmptyList.setImageResource(R.drawable.ic_menu_05);
+
+                    textEmptyList.setVisibility(View.VISIBLE);
+                    imgEmptyList.setVisibility(View.VISIBLE);
                 }
             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -129,6 +138,19 @@ public class FrNotifyActMain extends Fragment {
         recyclerView.addItemDecoration(offsetDecorationRC);
         recyclerView.setAdapter(adapterRcNotify);
         recyclerView.setNestedScrollingEnabled(false);
+
+
+        textEmptyList=(TextView)rootView.findViewById(R.id.textEmptyList);
+        imgEmptyList=(ImageView)rootView.findViewById(R.id.imgEmptyList);
+
+
+        if(listNotify.isEmpty()){
+            textEmptyList.setText("No hay Notifiaciones");
+            imgEmptyList.setImageResource(R.drawable.ic_menu_05);
+
+            textEmptyList.setVisibility(View.VISIBLE);
+            imgEmptyList.setVisibility(View.VISIBLE);
+        }
 
 
 

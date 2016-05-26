@@ -132,6 +132,9 @@ public class AdapterRcWikiEquipo extends RecyclerView.Adapter<AdapterRcWikiEquip
 
 
     private void loadImages(String urlThumbnail, final RcWikiEquipoViewHolder holder, final String tipo) {
+        if(urlThumbnail.equals("NA")){
+            urlThumbnail="http://ebfiends.esy.es/public/Misc/default_equipo.png";
+        }
         if (!urlThumbnail.equals("NA")) {
             imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
                 @Override

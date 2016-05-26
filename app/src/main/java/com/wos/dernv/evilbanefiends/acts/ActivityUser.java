@@ -34,6 +34,7 @@ import com.android.volley.Response;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.dialogs.DialogAdminCodeEdition;
@@ -62,8 +63,11 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
     //Web
     private MyVolleySingleton myVolleySingleton;
     private RequestQueue requestQueue;
+    private ImageLoader imageLoader;
     private ProgressDialog progressDialog ;
     private int persistenTry=0;
+
+    private ImageView imageViewChanger;
 
     // Necesario para coordinar vistas dentro del Layout "SnackBar"
     private CoordinatorLayout mCoordinator;
@@ -87,7 +91,11 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
         //web var Instance
         myVolleySingleton=MyVolleySingleton.getsInstance();
         requestQueue=myVolleySingleton.getmRequestQueue();
+        imageLoader=myVolleySingleton.getmImageLoader();
         progressDialog = new ProgressDialog(this);persistenTry=0;
+
+        imageViewChanger=(ImageView)findViewById(R.id.imgViewChanger) ;
+        loadImage("http://ebfiends.esy.es/public/Misc/bg_front_app.jpg",imageViewChanger);
 
         //Grupo de Coordinacion para la actividad Base
         mCoordinator = (CoordinatorLayout) findViewById(R.id.root_coordinator);
@@ -303,4 +311,24 @@ public class ActivityUser extends AppCompatActivity implements  ClickCallBackAdm
             frUserProfileActUser.setInstanceOfFr(frUserProfileActUser);
         }
     }
+
+
+    private void loadImage(String urlThumbnail , final ImageView img) {
+        if (!urlThumbnail.equals("NA")) {
+            imageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
+                @Override
+                public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+
+                    img.setImageBitmap(response.getBitmap());
+
+                }
+
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    loadImage("http://ebfiends.esy.es/public/Misc/bg_front_app.jpg",img);
+                }
+            });
+        }
+    }
+
 }
