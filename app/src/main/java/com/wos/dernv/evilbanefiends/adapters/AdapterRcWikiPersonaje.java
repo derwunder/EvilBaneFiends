@@ -23,9 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
-import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
-import com.wos.dernv.evilbanefiends.objects.WikiEquipo;
 import com.wos.dernv.evilbanefiends.objects.WikiPersonaje;
 
 import java.util.ArrayList;

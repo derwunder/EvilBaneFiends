@@ -1,12 +1,9 @@
 package com.wos.dernv.evilbanefiends.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
-import com.wos.dernv.evilbanefiends.fragments.FrPlayerActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrWikiEquipo;
 import com.wos.dernv.evilbanefiends.fragments.FrWikiHab;
 import com.wos.dernv.evilbanefiends.fragments.FrWikiMoneda;

@@ -39,10 +39,10 @@ public class AdapterRcMenu extends RecyclerView.Adapter<AdapterRcMenu.RcMenuView
         this.context=context;
         this.clickCallBack=clickCallBack;
 
-        listTitulo.add("Jugadores ØlympuŜ\n( ͡° ͜ʖ ͡°)");    listImage[0]=R.drawable.ic_menu_01;
-        listTitulo.add("Equipamento perfecto");listImage[1]=R.drawable.ic_menu_02;
-        listTitulo.add("Batalla de clan");     listImage[2]=R.drawable.ic_menu_03;
-        listTitulo.add("Wiki por ØlympuŜ");    listImage[3]=R.drawable.ic_menu_04;
+        listTitulo.add("Top 10 Jugadores\nProximamente ( ͡° ͜ʖ ͡°)");    listImage[0]=R.drawable.ic_menu_01;
+        listTitulo.add("Equipamento \nPerfecto");listImage[1]=R.drawable.ic_menu_02;
+        listTitulo.add("Tips \nBatalla de clan");     listImage[2]=R.drawable.ic_menu_03;
+        listTitulo.add("Wiki\nLongBook");    listImage[3]=R.drawable.ic_menu_04;
         listTitulo.add("Notificaciones");      listImage[4]=R.drawable.ic_menu_05;
 
         lisNT= MyApp.getWritableDatabase().getAllNotiItem();

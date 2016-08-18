@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.adapters.AdapterViewPagerUser;
-import com.wos.dernv.evilbanefiends.adapters.AdapterViewPagerWikia;
-import com.wos.dernv.evilbanefiends.logs.L;
 
 /**
  * Created by der_w on 5/16/2016.

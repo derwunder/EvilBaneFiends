@@ -25,13 +25,11 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.wos.dernv.evilbanefiends.R;
-import com.wos.dernv.evilbanefiends.adapters.AdapterRcWikiHab;
 import com.wos.dernv.evilbanefiends.adapters.AdapterRcWikiMoneda;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.network.Key;
 import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
 import com.wos.dernv.evilbanefiends.network.UrlEP;
-import com.wos.dernv.evilbanefiends.objects.WikiHab;
 import com.wos.dernv.evilbanefiends.objects.WikiMoneda;
 
 import org.json.JSONArray;

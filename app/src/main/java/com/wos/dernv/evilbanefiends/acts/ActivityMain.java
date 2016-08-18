@@ -38,7 +38,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.wos.dernv.evilbanefiends.R;
@@ -47,7 +46,6 @@ import com.wos.dernv.evilbanefiends.dialogs.DialogPassUserProfile;
 import com.wos.dernv.evilbanefiends.dialogs.DialogRegiToClan;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.fragments.FrBattleClanActMain;
-import com.wos.dernv.evilbanefiends.fragments.FrBattleClanEditionActUser;
 import com.wos.dernv.evilbanefiends.fragments.FrEqPerfectoActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrMenuActMain;
 import com.wos.dernv.evilbanefiends.fragments.FrNotifyActMain;
@@ -310,11 +308,12 @@ public class ActivityMain extends AppCompatActivity
 
         if(position==1){
 
-            mAppBarLayout.setExpanded(false,true);
-            mCollapsingToolbarLayout.setTitle("Jugadores Del Clan");
+          /*  mAppBarLayout.setExpanded(false,true);
+            mCollapsingToolbarLayout.setTitle("Top 10 Jugadores");
 
             stateBackPress=1000;
-            fragmentChanger("jugador");
+            fragmentChanger("jugador");*/
+            L.t(this,"Proximamente Estara activo");
         }
         if(position==2){
 
@@ -327,7 +326,7 @@ public class ActivityMain extends AppCompatActivity
         if(position==3){
 
             mAppBarLayout.setExpanded(false,true);
-            mCollapsingToolbarLayout.setTitle("Batalla de Clan");
+            mCollapsingToolbarLayout.setTitle("Tips Batalla de Clan");
 
             stateBackPress=1000;
             fragmentChanger("clanBatalla");
@@ -335,7 +334,7 @@ public class ActivityMain extends AppCompatActivity
         if(position==4){
 
             mAppBarLayout.setExpanded(false,true);
-            mCollapsingToolbarLayout.setTitle("Wiki Por ØlympuŜ");
+            mCollapsingToolbarLayout.setTitle("Wiki " +"LongBook");
 
             stateBackPress=1000;
             fragmentChanger("wiki");

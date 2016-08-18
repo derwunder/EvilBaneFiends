@@ -21,14 +21,14 @@
     <uses-permission android:name="com.wos.dernv.evilbanefiends.C2D_MESSAGE" />
 
     <application
-        android:name=".myapp.MyApp"
+        android:name="com.wos.dernv.evilbanefiends.myapp.MyApp"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher01"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".acts.ActivityLaunch"
+            android:name="com.wos.dernv.evilbanefiends.acts.ActivityLaunch"
             android:label="@string/app_name"
             android:theme="@style/AppLaunch">
             <intent-filter>
@@ -38,7 +38,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".acts.ActivityMain"
+            android:name="com.wos.dernv.evilbanefiends.acts.ActivityMain"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
@@ -48,7 +48,7 @@
             android:value="@integer/google_play_services_version" />
 
         <receiver
-            android:name=".network.notification.GcmBroadcastReceiver"
+            android:name="com.wos.dernv.evilbanefiends.network.notification.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -58,7 +58,7 @@
         </receiver>
 
         <service
-            android:name=".network.notification.GcmIntentService"
+            android:name="com.wos.dernv.evilbanefiends.network.notification.GcmIntentService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -66,12 +66,12 @@
         </service>
 
         <activity
-            android:name=".acts.ActivityUser"
+            android:name="com.wos.dernv.evilbanefiends.acts.ActivityUser"
             android:label="@string/title_activity_activity_user"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".acts.ActivityMain" />
+                android:value="com.wos.dernv.evilbanefiends.acts.ActivityMain" />
         </activity>
 
         <activity

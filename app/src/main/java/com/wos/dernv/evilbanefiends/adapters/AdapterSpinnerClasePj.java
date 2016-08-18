@@ -8,12 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.acts.ActivityUser;
-import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
-import com.wos.dernv.evilbanefiends.objects.WikiEquipo;
 
 import java.util.ArrayList;
 

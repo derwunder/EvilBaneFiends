@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
 import com.wos.dernv.evilbanefiends.R;
-import com.wos.dernv.evilbanefiends.events.ClickCallBack;
 import com.wos.dernv.evilbanefiends.events.ClickCallBackAdmin;
 import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
 import com.wos.dernv.evilbanefiends.objects.AdminCodeEdition;

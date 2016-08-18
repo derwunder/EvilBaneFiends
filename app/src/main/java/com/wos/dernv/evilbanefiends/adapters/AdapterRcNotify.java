@@ -20,10 +20,8 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.wos.dernv.evilbanefiends.R;
-import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.myapp.MyApp;
 import com.wos.dernv.evilbanefiends.objects.NotifyItem;
-import com.wos.dernv.evilbanefiends.objects.Player;
 
 import java.util.ArrayList;
 

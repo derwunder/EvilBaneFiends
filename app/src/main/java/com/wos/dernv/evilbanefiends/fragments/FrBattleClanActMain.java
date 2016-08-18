@@ -1,38 +1,27 @@
 package com.wos.dernv.evilbanefiends.fragments;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Base64;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
@@ -49,7 +38,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.wos.dernv.evilbanefiends.R;
-import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.myapp.MyApp;
 import com.wos.dernv.evilbanefiends.network.Key;
 import com.wos.dernv.evilbanefiends.network.MyVolleySingleton;
@@ -59,10 +47,6 @@ import com.wos.dernv.evilbanefiends.objects.UserRegistro;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by der_w on 5/25/2016.
@@ -312,7 +296,8 @@ private View viewTest;
             textBuffAttValue.setText("Buff de Atk");
             textBuffDefValue.setText("Buff de Def");
             textBuffCriValue.setText("Buff de Cri");
-            textDescValue.setText("Formacion - Elite: Listos para el combate, solo los mejores venceran");
+            textDescValue.setText(clanBatalla.getDetalle());
+          //  textDescValue.setText("Formacion - Elite: Listos para el combate, solo los mejores venceran");
         }
 
 

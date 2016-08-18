@@ -2,7 +2,6 @@ package com.wos.dernv.evilbanefiends.fragments;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,16 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.adapters.AdapterRcNotify;
-import com.wos.dernv.evilbanefiends.logs.L;
 import com.wos.dernv.evilbanefiends.myapp.MyApp;
 import com.wos.dernv.evilbanefiends.objects.NotifyItem;
 

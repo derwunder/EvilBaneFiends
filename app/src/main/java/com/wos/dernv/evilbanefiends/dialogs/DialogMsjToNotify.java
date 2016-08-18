@@ -23,8 +23,6 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
-import com.wos.dernv.evilbanefiends.logs.L;
-import com.wos.dernv.evilbanefiends.myapp.MyApp;
 
 import java.util.ArrayList;
 

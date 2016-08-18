@@ -3,7 +3,6 @@ package com.wos.dernv.evilbanefiends.fragments;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.wos.dernv.evilbanefiends.R;
-
-import java.util.List;
 
 /**
  * Created by der_w on 5/12/2016.
@@ -79,7 +76,7 @@ public class FrWebViewActMain extends Fragment {
         });
 
 
-        webView.loadUrl("https://www.facebook.com/Fiends-Clan-Evilbane-Rise-of-Ravens-1004273616330294/?fref=ts");
+        webView.loadUrl("https://www.facebook.com/EvilBane/?fref=ts");
 
 
         return rootView; //super.onCreateView(inflater, container, savedInstanceState);

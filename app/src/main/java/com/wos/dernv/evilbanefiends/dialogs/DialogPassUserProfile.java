@@ -1,6 +1,5 @@
 package com.wos.dernv.evilbanefiends.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,8 +15,6 @@ import android.widget.TextView;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBack;
-import com.wos.dernv.evilbanefiends.events.ClickCallBackUserProfile;
-import com.wos.dernv.evilbanefiends.fragments.FrUserProfileActUser;
 import com.wos.dernv.evilbanefiends.myapp.MyApp;
 import com.wos.dernv.evilbanefiends.objects.UserRegistro;
 

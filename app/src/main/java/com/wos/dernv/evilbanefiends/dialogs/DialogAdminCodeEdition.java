@@ -1,6 +1,5 @@
 package com.wos.dernv.evilbanefiends.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,7 +16,6 @@ import android.widget.TextView;
 
 import com.wos.dernv.evilbanefiends.R;
 import com.wos.dernv.evilbanefiends.events.ClickCallBackAdmin;
-import com.wos.dernv.evilbanefiends.logs.L;
 
 /**
  * Created by der_w on 5/17/2016.
